@@ -45,12 +45,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
         items: [
           BottomNavigationBarItem(
               backgroundColor: Theme.of(context).primaryColor,
-              icon: Icon(
+              icon: const Icon(
                 Icons.home,
                 // color: Colors.white,
                 size: 22,
               ),
-              // title: Text('Home'),
+              label: 'Home',
               activeIcon: Icon(
                 Icons.home,
                 size: 22,
@@ -58,12 +58,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
               )),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(
+            icon: const Icon(
               Icons.schedule,
               color: Colors.white,
               size: 25,
             ),
-            // title: Text('Schedule'),
+            label: 'Schedule',
             activeIcon: Icon(
               Icons.schedule,
               color: Theme.of(context).buttonColor,
@@ -72,12 +72,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
           ),
           BottomNavigationBarItem(
               backgroundColor: Theme.of(context).primaryColor,
-              icon: Icon(
+              icon: const Icon(
                 Icons.add_box_rounded,
                 color: Colors.white,
                 size: 22,
               ),
-              // title: Text('Post'),
+              label: 'Post',
               activeIcon: Icon(
                 Icons.add_box_rounded,
                 color: Theme.of(context).buttonColor,
@@ -85,12 +85,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
               )),
           BottomNavigationBarItem(
               backgroundColor: Theme.of(context).primaryColor,
-              icon: Icon(
+              icon: const Icon(
                 Icons.notifications,
                 color: Colors.white,
                 size: 22,
               ),
-              // title: Text('Notifications'),
+              label: 'Notification',
               activeIcon: Icon(
                 Icons.notifications,
                 color: Theme.of(context).buttonColor,
@@ -98,12 +98,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
               )),
           BottomNavigationBarItem(
               backgroundColor: Theme.of(context).primaryColor,
-              icon: Icon(
+              icon: const Icon(
                 Icons.person,
                 color: Colors.white,
                 size: 22,
               ),
-              // title: Text('Profile'),
+              label: 'Profile',
               activeIcon: Icon(
                 Icons.person,
                 color: Theme.of(context).buttonColor,

@@ -54,8 +54,8 @@ class _SignupScreenState extends State<SignupScreen> {
             Padding(
               padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 5),
               child: Text(
-                'Join Handyman today, Let\'s create an account',
-                textAlign: TextAlign.center,
+                'Create Handyman business account today and get hired by customers',
+                textAlign: TextAlign.left,
                 style: TextStyle(fontSize: 15, color: Colors.white),
               ),
             ),
@@ -69,33 +69,6 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: SingleChildScrollView(
                         child: Column(
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15.0, right: 15, top: 5, bottom: 5),
-                          child: TextField(
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                            decoration: InputDecoration(
-                              prefixIcon: Icon(
-                                Icons.person,
-                                color: Theme.of(context).buttonColor,
-                              ),
-                              labelText: 'Customer',
-                              labelStyle: TextStyle(color: Colors.white),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Theme.of(context).shadowColor),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                            ),
-                            keyboardType: TextInputType.emailAddress,
-                          ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.only(
                               left: 15.0, right: 15, top: 5, bottom: 5),

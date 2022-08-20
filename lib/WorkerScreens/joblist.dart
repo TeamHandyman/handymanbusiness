@@ -14,7 +14,7 @@ class _JoblistScreenState extends State<JoblistScreen>
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    TabController _tabController = TabController(length: 4, vsync: this);
+    TabController _tabController = TabController(length: 3, vsync: this);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -43,7 +43,7 @@ class _JoblistScreenState extends State<JoblistScreen>
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    'Schedule',
+                    'Job Schedule',
                     style: TextStyle(
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
@@ -82,7 +82,6 @@ class _JoblistScreenState extends State<JoblistScreen>
                   Tab(text: 'All'),
                   Tab(text: 'Ongoing'),
                   Tab(text: 'Completed'),
-                  Tab(text: 'Pending'),
                 ],
               ),
             ),
@@ -92,21 +91,408 @@ class _JoblistScreenState extends State<JoblistScreen>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  Text(
-                    'Test 1',
-                    style: TextStyle(color: Colors.white),
+                  Container(
+                    height: height,
+                    width: width,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).shadowColor,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: ListView(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Container(
+                                height: 150,
+                                width: width,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).backgroundColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Job heading',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Service Provider:',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 14),
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            'Date started: 06/07',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 14),
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            'Date completed: 06/07',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 14),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            'Status: Completed',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 14),
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            'Method: Contact basis',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 14),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 150,
+                              width: width,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).backgroundColor,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Job heading',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Service Provider:',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 14),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Date started: 06/07',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Date completed: 06/07',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Status: Completed',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Method: Contract basis',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                  Text(
-                    'Test 2',
-                    style: TextStyle(color: Colors.white),
+                  Container(
+                    height: height,
+                    width: width,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).shadowColor,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: ListView(
+                          children: [
+                            Container(
+                              height: 150,
+                              width: width,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).backgroundColor,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Job heading',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Service Provider:',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 14),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Date started: 06/07',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Date completed: 06/07',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Status: Completed',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Method: Contact basis',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                  Text(
-                    'Test 3',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  Text(
-                    'Test 4',
-                    style: TextStyle(color: Colors.white),
+                  Container(
+                    height: height,
+                    width: width,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).shadowColor,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: ListView(
+                          children: [
+                            Container(
+                              height: 150,
+                              width: width,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).backgroundColor,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Job heading',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Service Provider:',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 14),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Date started: 06/07',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Date completed: 06/07',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Status: Completed',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Method: Contract basis',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 14),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),

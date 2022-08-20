@@ -39,7 +39,7 @@ class _PostScreenState extends State<PostScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    'Post a job',
+                    'Create Ads',
                     style: TextStyle(
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
@@ -56,7 +56,7 @@ class _PostScreenState extends State<PostScreen> {
                 children: [
                   Flexible(
                     child: Text(
-                      'Post your requirement',
+                      'You can create/edit your ads that will be posted by Handyman team',
                       style: TextStyle(
                           fontWeight: FontWeight.w300,
                           color: Colors.white,
@@ -67,159 +67,78 @@ class _PostScreenState extends State<PostScreen> {
                 ],
               ),
             ),
-            Form(
-              key: _form,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        labelText: 'Job title',
-                        fillColor: Colors.white,
-                        labelStyle: TextStyle(color: Colors.white),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Theme.of(context).shadowColor),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: null,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter job title';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        labelText: 'Worker type',
-                        fillColor: Colors.white,
-                        labelStyle: TextStyle(color: Colors.white),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Theme.of(context).shadowColor),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: null,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter job title';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        labelText: 'Description',
-                        labelStyle: TextStyle(color: Colors.white),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Theme.of(context).shadowColor),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      maxLines: 5,
-                      keyboardType: TextInputType.multiline,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter a description';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        labelText: 'Date',
-                        fillColor: Colors.white,
-                        labelStyle: TextStyle(color: Colors.white),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Theme.of(context).shadowColor),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 100,
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Container(
+                width: width,
+                height: height * 0.5,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 200,
                       width: width,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Theme.of(context).shadowColor,
                       ),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Sample description Sample description Sample description Sample description',
+                        style: TextStyle(color: Colors.black),
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Jobs completed:',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Row(
                           children: [
                             Icon(
-                              Icons.image,
-                              color: Colors.white,
+                              Icons.star,
+                              color: Theme.of(context).buttonColor,
+                              size: 15,
                             ),
                             Text(
-                              'Upload Image',
-                              style: TextStyle(color: Colors.white),
-                            ),
+                              '4.7',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            )
                           ],
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: Container(
-                      height: 46,
-                      width: width,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).buttonColor,
-                        borderRadius: BorderRadius.circular(5),
+                    Spacer(),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Text(
+                          'Edit Advertisement',
+                          style: TextStyle(
+                              color: Theme.of(context).buttonColor,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      child: Center(
-                        child: Text('Post Job',
-                            style: TextStyle(
-                                color: Theme.of(context).backgroundColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500)),
-                      ),
-                    ),
-                  ),
-                ],
+                    )
+                  ],
+                ),
               ),
             )
           ],

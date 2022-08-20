@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handymanbusiness/Onboarding/final.dart';
 import 'package:handymanbusiness/Onboarding/login.dart';
 import 'package:handymanbusiness/Onboarding/signup.dart';
 import 'package:handymanbusiness/Onboarding/verification.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         SignupScreen.routeName: (ctx) => SignupScreen(),
         Verifyscreen.routeName: (ctx) => Verifyscreen(),
         Goodjobscreen.routeName: (ctx) => Goodjobscreen(),
+        FinalSignupscreen.routeName: (ctx) => FinalSignupscreen(),
         NavigationScreen.routeName: (ctx) => NavigationScreen(),
         HomeScreen.routeName: (ctx) => HomeScreen(),
         JoblistScreen.routeName: (ctx) => JoblistScreen(),
