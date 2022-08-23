@@ -38,7 +38,7 @@ class _JoblistScreenState extends State<JoblistScreen>
           Padding(
             padding: const EdgeInsets.all(3.0),
             child: Icon(
-              Icons.circle,
+              Icons.person,
               size: 15,
               color: color,
             ),
@@ -84,8 +84,8 @@ class _JoblistScreenState extends State<JoblistScreen>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    bothParties(context, 'Nuwan Perera', Colors.amber),
-                    bothParties(context, 'Namal Rajapakse', Colors.purple[800]),
+                    bothParties(context, 'Nuwan Perera', Colors.black),
+                    // bothParties(context, 'Namal Rajapakse', Colors.purple[800]),
                   ],
                 ),
               ),
