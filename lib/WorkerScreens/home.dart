@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handyman/WorkerScreens/WorkerSubscreens/viewjob.dart';
+import 'package:handyman/services/authservice.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/homescreen';
@@ -9,6 +10,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String title, desc, workerType;
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;

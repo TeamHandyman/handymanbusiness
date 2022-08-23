@@ -5,6 +5,8 @@ import 'package:handyman/WorkerScreens/notifications.dart';
 import 'package:handyman/WorkerScreens/post.dart';
 import 'package:handyman/WorkerScreens/profile.dart';
 
+import '../services/authservice.dart';
+
 class NavigationScreen extends StatefulWidget {
   static const routeName = '/navigationscreen';
 
@@ -27,6 +29,18 @@ class _NavigationScreenState extends State<NavigationScreen> {
   void _selectPage(int index) {
     setState(() {
       _selectedPageIndex = index;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getCustomerAds();
+  }
+
+  void getCustomerAds() {
+    AuthService().getCustomerAds("Plumber").then((val) {
+      print(val);
     });
   }
 

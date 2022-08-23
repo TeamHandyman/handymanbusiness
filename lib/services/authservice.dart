@@ -139,4 +139,19 @@ class AuthService {
           fontSize: 16.0);
     }
   }
+
+  getCustomerAds(searchTerm) async {
+    try {
+      return await dio.get(
+          'https://projecthandyman.herokuapp.com/getCustomerAds?term=$searchTerm');
+    } on DioError catch (e) {
+      Fluttertoast.showToast(
+          msg: e.response.data['msg'],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
 }
