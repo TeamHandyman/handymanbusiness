@@ -202,7 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Container(
               width: width,
-              height: 100,
+              height: 130,
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
@@ -214,7 +214,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'Sample description sample description sample description',
+                      'This is a dummy description of the advertisement. You can provide all the information about the service you provided, conditions, requirements and everything',
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -240,7 +240,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 15.0, right: 15),
               child: Container(
-                height: 150,
+                height: 160,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
@@ -250,40 +250,68 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(3),
-                      child: Container(
-                        height: 100,
-                        width: 180,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).shadowColor,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/services1.jpeg'),
-                              fit: BoxFit.fill,
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 130,
+                            width: 180,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).shadowColor,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/images/services1.jpeg'),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15.0, right: 15, top: 5),
+                            child: Text(
+                              'Plumbing',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(3),
-                      child: Container(
-                        height: 100,
-                        width: 180,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).shadowColor,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/services2.jpeg'),
-                              fit: BoxFit.fill,
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 130,
+                            width: 180,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).shadowColor,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/images/services2.jpeg'),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15.0, right: 15, top: 5),
+                            child: Text(
+                              'Carpentary',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ],
@@ -302,6 +330,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     CircleAvatar(
                       radius: 45,
                       backgroundColor: Theme.of(context).shadowColor,
+                      backgroundImage: AssetImage('assets/images/profile.png'),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
@@ -373,7 +402,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'Bio goes here bio goes here bio goes here bio goes here Bio goes here bio goes here bio goes here bio goes here',
+                    'This is the bio of the handyman. You can tell about your work experience and everything about you',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handyman/WorkerScreens/WorkerSubscreens/viewjob.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/homescreen';
@@ -12,8 +13,32 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    Widget jobRequestTile(
-        BuildContext context, String fname, String lname, String image) {
+    Widget detailsRow(BuildContext context, String text, IconData icon) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: Theme.of(context).buttonColor,
+              size: 16,
+            ),
+            Text(
+              text,
+              style: TextStyle(
+                  color: Theme.of(context).backgroundColor,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold),
+            )
+          ],
+        ),
+      );
+    }
+
+    Widget jobRequestTile(BuildContext context, String fname, String lname,
+        String image, String city, String job, String date) {
       return Column(
         children: [
           Padding(
@@ -57,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Card(
               color: Theme.of(context).shadowColor,
               child: Container(
-                height: 200,
+                height: 230,
                 width: width,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -71,6 +96,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 16)),
+                    ),
+                    Divider(
+                      height: 15,
+                      thickness: 2,
+                      indent: 15,
+                      endIndent: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        detailsRow(context, city, Icons.location_on),
+                        detailsRow(context, job, Icons.man),
+                        detailsRow(context, date, Icons.calendar_month),
+                      ],
                     ),
                     Padding(
                       padding:
@@ -87,11 +126,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 15, right: 15),
+                            padding: const EdgeInsets.only(left: 15, right: 5),
                             child: Container(
-                              width: 150,
+                              width: 180,
                               child: Text(
-                                'Need a mechanic to fix several electronic items\nURGENT',
+                                'This is a dummy description of the requirement of the customer',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,
@@ -112,6 +151,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         right: 15,
                       ),
                       child: GestureDetector(
+                        onTap: () => Navigator.of(context)
+                            .pushNamed(ViewJobScreen.routeName),
                         child: Container(
                           height: 40,
                           width: width,
@@ -120,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Center(
-                            child: Text('Accept Job',
+                            child: Text('View Job',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Theme.of(context).backgroundColor,
@@ -248,11 +289,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ],
             ),
-            jobRequestTile(context, 'Namal', 'Rajapakse', 'portfolio1'),
-            jobRequestTile(context, 'Keshan', 'Gunathunga', 'portfolio2'),
-            jobRequestTile(context, 'Wanidu', 'Hasaranga', 'portfolio3'),
-            jobRequestTile(context, 'Chaminda', 'Vaas', 'portfolio1'),
-            jobRequestTile(context, 'Gihan', 'Perera', 'portfolio2'),
+            jobRequestTile(context, 'Namal', 'Rajapakse', 'portfolio1',
+                'Kaduwela', 'Mechanic', 'Jun 07'),
+            jobRequestTile(context, 'Keshan', 'Gunathunga', 'portfolio2',
+                'Malabe', 'Carpentry', 'Jul 17'),
+            jobRequestTile(context, 'Wanidu', 'Hasaranga', 'portfolio3',
+                'Athurugiriya', 'Mechanic', 'Jun 27'),
+            jobRequestTile(context, 'Chaminda', 'Vaas', 'portfolio1',
+                'Battaramulla', 'Mechanic', 'Jun 20'),
+            jobRequestTile(context, 'Gihan', 'Perera', 'portfolio2', 'Kaduwela',
+                'Mechanic', 'Jun 07'),
           ],
         ),
       ),

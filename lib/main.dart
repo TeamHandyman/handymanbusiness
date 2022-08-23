@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handyman/Onboarding/login.dart';
+import 'package:handyman/WorkerScreens/WorkerSubscreens/quotation.dart';
+import 'package:handyman/WorkerScreens/WorkerSubscreens/viewjob.dart';
 import 'Onboarding/final.dart';
 import 'Onboarding/goodjob.dart';
 import 'Onboarding/signup.dart';
@@ -37,6 +39,8 @@ class MyApp extends StatelessWidget {
         JoblistScreen.routeName: (ctx) => JoblistScreen(),
         PostScreen.routeName: (ctx) => PostScreen(),
         NotificationScreen.routeName: (ctx) => NotificationScreen(),
+        ViewJobScreen.routeName: (ctx) => ViewJobScreen(),
+        QuotationScreen.routeName: (ctx) => QuotationScreen()
       },
     );
   }
