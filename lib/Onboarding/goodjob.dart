@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handyman/Onboarding/final.dart';
 // import 'package:handyman/CustomerScreens/home.dart';
 // import 'package:handyman/CustomerScreens/navigation.dart';
@@ -348,11 +349,31 @@ class _GoodjobscreenState extends State<Goodjobscreen> {
                   ),
                   child: GestureDetector(
                     onTap: () {
-                      data.addAll(
-                          [fName, lName, valueChooseGen, valueChooseDis, city]);
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => FinalSignupscreen(),
-                          settings: RouteSettings(arguments: data)));
+                      if (fName == null ||
+                          lName == null ||
+                          valueChooseGen == null ||
+                          valueChooseDis == null ||
+                          city == null) {
+                        Fluttertoast.showToast(
+                            msg: 'Please enter the required fields',
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      } else {
+                        data.addAll([
+                          fName,
+                          lName,
+                          valueChooseGen,
+                          valueChooseDis,
+                          city
+                        ]);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => FinalSignupscreen(),
+                            settings: RouteSettings(arguments: data)));
+                      }
                     },
                     child: Container(
                       height: 46,

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:handyman/Onboarding/signup.dart';
+import 'package:handyman/WorkerScreens/home.dart';
 import 'package:handyman/WorkerScreens/navigations.dart';
+import 'package:progress_indicator_button/progress_button.dart';
+
+import '../services/authservice.dart';
 // import 'package:handymanbu/Onboarding/signup.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,8 +16,32 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  var email, password, token;
   @override
   Widget build(BuildContext context) {
+    void httpJob(AnimationController controller) async {
+      controller.forward();
+
+      await AuthService().loginWorker(email, password).then((val) {
+        if (val.data['success']) {
+          token = val.data['token'];
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => NavigationScreen()));
+        } else {
+          Fluttertoast.showToast(
+              msg: 'Incorrect Credentials!',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          return;
+        }
+      });
+      controller.reset();
+    }
+
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
@@ -64,6 +93,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 keyboardType: TextInputType.emailAddress,
+                onChanged: (val) {
+                  email = val;
+                },
               ),
             ),
             Padding(
@@ -88,6 +120,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 obscureText: true,
+                onChanged: (val) {
+                  password = val;
+                },
               ),
             ),
             Row(
@@ -111,22 +146,34 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.only(
                   top: 3, left: 15, right: 15, bottom: 10),
               child: GestureDetector(
-                onTap: () =>
-                    Navigator.of(context).pushNamed(NavigationScreen.routeName),
                 child: Container(
                   height: 46,
                   width: width,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).buttonColor,
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: Center(
-                    child: Text('Login',
-                        style: TextStyle(
-                            color: Theme.of(context).backgroundColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500)),
-                  ),
+                  child: ProgressButton(
+                      color: Theme.of(context).buttonColor,
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      child: Text('Login',
+                          style: TextStyle(
+                              color: Theme.of(context).backgroundColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500)),
+                      onPressed: (AnimationController controller) async {
+                        if (email == "" || password == "") {
+                          Fluttertoast.showToast(
+                              msg: 'Please enter the required fields',
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        } else {
+                          await httpJob(controller);
+                        }
+                      }),
                 ),
               ),
             ),
