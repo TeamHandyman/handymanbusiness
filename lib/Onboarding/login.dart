@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:handyman/Onboarding/signup.dart';
+import 'package:handyman/WorkerScreens/navigations.dart';
 // import 'package:handymanbu/Onboarding/signup.dart';
-import 'package:handymanbusiness/Onboarding/signup.dart';
 
 class LoginScreen extends StatefulWidget {
   static const routeName = '/loginscreen';
@@ -110,7 +111,8 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.only(
                   top: 3, left: 15, right: 15, bottom: 10),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () =>
+                    Navigator.of(context).pushNamed(NavigationScreen.routeName),
                 child: Container(
                   height: 46,
                   width: width,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handymanbusiness/Onboarding/goodjob.dart';
+import 'package:handyman/Onboarding/goodjob.dart';
 
 class Verifyscreen extends StatefulWidget {
   static const routeName = '/verify';
