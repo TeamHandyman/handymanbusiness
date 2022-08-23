@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:handymanbusiness/WorkerScreens/home.dart';
-import 'package:handymanbusiness/WorkerScreens/joblist.dart';
-import 'package:handymanbusiness/WorkerScreens/notifications.dart';
-import 'package:handymanbusiness/WorkerScreens/post.dart';
-import 'package:handymanbusiness/WorkerScreens/profile.dart';
+import 'package:handyman/WorkerScreens/home.dart';
+import 'package:handyman/WorkerScreens/joblist.dart';
+import 'package:handyman/WorkerScreens/notifications.dart';
+import 'package:handyman/WorkerScreens/post.dart';
+import 'package:handyman/WorkerScreens/profile.dart';
 
 class NavigationScreen extends StatefulWidget {
   static const routeName = '/navigationscreen';

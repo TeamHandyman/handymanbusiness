@@ -1,6 +1,7 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
-import 'package:handymanbusiness/Onboarding/final.dart';
-import 'package:handymanbusiness/WorkerScreens/navigations.dart';
+import 'package:handyman/Onboarding/final.dart';
 // import 'package:handyman/CustomerScreens/home.dart';
 // import 'package:handyman/CustomerScreens/navigation.dart';
 
@@ -11,9 +12,40 @@ class Goodjobscreen extends StatefulWidget {
 }
 
 class _GoodjobscreenState extends State<Goodjobscreen> {
+  String valueChooseGen, valueChooseDis, fName, lName, city;
+  List genders = ['Male', 'Female'];
+  List districts = [
+    'Colombo',
+    'Gampaha',
+    'Kalutara',
+    'Kandy',
+    'Matale',
+    'Nuwara Eliya',
+    'Galle',
+    'Matara',
+    'Hambantota',
+    'Jaffna',
+    'Kilinochchi',
+    'Mannar',
+    'Vavuniya',
+    'Mullativu',
+    'Batticaloa',
+    'Ampara',
+    'Trincomalee',
+    'Kurunegala',
+    'Puttalam',
+    'Anuradhapura',
+    'Polonnaruwa',
+    'Badulla',
+    'Moneragala',
+    'Ratnapura',
+    'Kegalle'
+  ];
+  List data;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    data = ModalRoute.of(context).settings.arguments as List;
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -128,6 +160,9 @@ class _GoodjobscreenState extends State<Goodjobscreen> {
                               ),
                             ),
                             keyboardType: TextInputType.emailAddress,
+                            onChanged: (val) {
+                              fName = val;
+                            },
                           ),
                         ),
                         Padding(
@@ -156,22 +191,20 @@ class _GoodjobscreenState extends State<Goodjobscreen> {
                               ),
                             ),
                             keyboardType: TextInputType.emailAddress,
+                            onChanged: (val) {
+                              lName = val;
+                            },
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
                               left: 15.0, right: 15, top: 5, bottom: 5),
-                          child: TextField(
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
+                          child: DropdownButtonFormField(
                             decoration: InputDecoration(
                               prefixIcon: Icon(
-                                Icons.accessibility_new_rounded,
+                                Icons.male,
                                 color: Theme.of(context).buttonColor,
                               ),
-                              labelText: 'Gender',
-                              labelStyle: const TextStyle(color: Colors.white),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Theme.of(context).shadowColor),
@@ -183,23 +216,37 @@ class _GoodjobscreenState extends State<Goodjobscreen> {
                                 borderRadius: BorderRadius.circular(5),
                               ),
                             ),
-                            keyboardType: TextInputType.text,
+                            icon: Icon(
+                              Icons.arrow_drop_down,
+                              color: Theme.of(context).buttonColor,
+                            ),
+                            hint: Text("Gender",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16)),
+                            dropdownColor: Theme.of(context).backgroundColor,
+                            isExpanded: true,
+                            style: TextStyle(color: Colors.white),
+                            value: valueChooseGen,
+                            onChanged: (newValue) {
+                              setState(() {
+                                valueChooseGen = newValue;
+                              });
+                            },
+                            items: genders.map((valueItem) {
+                              return DropdownMenuItem(
+                                  value: valueItem, child: Text(valueItem));
+                            }).toList(),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
                               left: 15.0, right: 15, top: 5, bottom: 5),
-                          child: TextField(
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
+                          child: DropdownButtonFormField(
                             decoration: InputDecoration(
                               prefixIcon: Icon(
                                 Icons.location_on,
                                 color: Theme.of(context).buttonColor,
                               ),
-                              labelText: 'District',
-                              labelStyle: const TextStyle(color: Colors.white),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Theme.of(context).shadowColor),
@@ -211,7 +258,26 @@ class _GoodjobscreenState extends State<Goodjobscreen> {
                                 borderRadius: BorderRadius.circular(5),
                               ),
                             ),
-                            obscureText: true,
+                            icon: Icon(
+                              Icons.arrow_drop_down,
+                              color: Theme.of(context).buttonColor,
+                            ),
+                            hint: Text("District",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16)),
+                            dropdownColor: Theme.of(context).backgroundColor,
+                            isExpanded: true,
+                            style: TextStyle(color: Colors.white),
+                            value: valueChooseDis,
+                            onChanged: (newValue) {
+                              setState(() {
+                                valueChooseDis = newValue;
+                              });
+                            },
+                            items: districts.map((valueItem) {
+                              return DropdownMenuItem(
+                                  value: valueItem, child: Text(valueItem));
+                            }).toList(),
                           ),
                         ),
                         Padding(
@@ -239,7 +305,10 @@ class _GoodjobscreenState extends State<Goodjobscreen> {
                                 borderRadius: BorderRadius.circular(5),
                               ),
                             ),
-                            obscureText: true,
+                            keyboardType: TextInputType.name,
+                            onChanged: (val) {
+                              city = val;
+                            },
                           ),
                         ),
                         // Padding(
@@ -278,8 +347,13 @@ class _GoodjobscreenState extends State<Goodjobscreen> {
                     right: 15,
                   ),
                   child: GestureDetector(
-                    onTap: () => Navigator.of(context)
-                        .pushNamed(FinalSignupscreen.routeName),
+                    onTap: () {
+                      data.addAll(
+                          [fName, lName, valueChooseGen, valueChooseDis, city]);
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => FinalSignupscreen(),
+                          settings: RouteSettings(arguments: data)));
+                    },
                     child: Container(
                       height: 46,
                       width: width,

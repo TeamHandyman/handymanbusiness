@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:handymanbusiness/Onboarding/final.dart';
-import 'package:handymanbusiness/Onboarding/login.dart';
-import 'package:handymanbusiness/Onboarding/signup.dart';
-import 'package:handymanbusiness/Onboarding/verification.dart';
-import 'package:handymanbusiness/Onboarding/goodjob.dart';
-import 'package:handymanbusiness/WorkerScreens/home.dart';
-import 'package:handymanbusiness/WorkerScreens/joblist.dart';
-import 'package:handymanbusiness/WorkerScreens/navigations.dart';
-import 'package:handymanbusiness/WorkerScreens/notifications.dart';
-import 'package:handymanbusiness/WorkerScreens/post.dart';
+import 'package:handyman/Onboarding/login.dart';
+import 'Onboarding/final.dart';
+import 'Onboarding/goodjob.dart';
+import 'Onboarding/signup.dart';
+import 'Onboarding/verification.dart';
+import 'WorkerScreens/home.dart';
+import 'WorkerScreens/joblist.dart';
+import 'WorkerScreens/navigations.dart';
+import 'WorkerScreens/notifications.dart';
+import 'WorkerScreens/post.dart';
 
 void main() {
   runApp(MyApp());
