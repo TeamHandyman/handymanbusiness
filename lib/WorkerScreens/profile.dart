@@ -61,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Container(
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/portfolio1.jpg'),
+                      image: AssetImage('assets/images/portfolio1.jpeg'),
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -111,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           decoration: const BoxDecoration(
                             image: DecorationImage(
                                 image:
-                                    AssetImage('assets/images/portfolio3.jpg'),
+                                    AssetImage('assets/images/portfolio3.jpeg'),
                                 fit: BoxFit.fill),
                           ),
                         ),
@@ -130,7 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           decoration: const BoxDecoration(
                             image: DecorationImage(
                                 image:
-                                    AssetImage('assets/images/portfolio3.jpg'),
+                                    AssetImage('assets/images/portfolio3.jpeg'),
                                 fit: BoxFit.fill),
                           ),
                         ),
@@ -148,7 +148,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Container(
                           decoration: const BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage('assets/images/portfolio1.jpg'),
+                              image:
+                                  AssetImage('assets/images/portfolio1.jpeg'),
                               fit: BoxFit.fill,
                             ),
                           ),
@@ -188,7 +189,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           decoration: const BoxDecoration(
                             image: DecorationImage(
                               image:
-                                  AssetImage('assets/images/portfolio1.jpg'),
+                                  AssetImage('assets/images/portfolio1.jpeg'),
                               fit: BoxFit.fill,
                             ),
                           ),
@@ -259,8 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Container(
                           decoration: const BoxDecoration(
                             image: DecorationImage(
-                              image:
-                                  AssetImage('assets/images/services1.jpg'),
+                              image: AssetImage('assets/images/services1.jpeg'),
                               fit: BoxFit.fill,
                             ),
                           ),
@@ -279,8 +279,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Container(
                           decoration: const BoxDecoration(
                             image: DecorationImage(
-                              image:
-                                  AssetImage('assets/images/services2.jpg'),
+                              image: AssetImage('assets/images/services2.jpeg'),
                               fit: BoxFit.fill,
                             ),
                           ),

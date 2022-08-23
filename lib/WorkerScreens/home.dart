@@ -12,6 +12,136 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    Widget jobRequestTile(
+        BuildContext context, String fname, String lname, String image) {
+      return Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 15, right: 15, top: 10),
+            child: Container(
+              width: width,
+              height: 30,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.grey,
+                    radius: 20,
+                    backgroundImage: AssetImage('assets/images/services1.jpeg'),
+                    child: Center(
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                        size: 15,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 5.0,
+                      right: 15,
+                    ),
+                    child: Text(
+                      fname + ' ' + lname,
+                      style: TextStyle(color: Colors.white, fontSize: 14),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.only(left: 15.0, right: 15, top: 5, bottom: 5),
+            child: Card(
+              color: Theme.of(context).shadowColor,
+              child: Container(
+                height: 200,
+                width: width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 15.0, top: 15, right: 15),
+                      child: Text('Mechanic Required',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16)),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 15.0, top: 10, right: 15),
+                      child: Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.asset(
+                              'assets/images/${image}.jpeg',
+                              height: 80.0,
+                              width: 80.0,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15, right: 15),
+                            child: Container(
+                              width: 150,
+                              child: Text(
+                                'Need a mechanic to fix several electronic items\nURGENT',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 20.0,
+                        bottom: 10,
+                        left: 15,
+                        right: 15,
+                      ),
+                      child: GestureDetector(
+                        child: Container(
+                          height: 40,
+                          width: width,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).buttonColor,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Center(
+                            child: Text('Accept Job',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).backgroundColor,
+                                  fontSize: 14,
+                                )),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -118,175 +248,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
-              child: Container(
-                width: width,
-                height: 30,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    CircleAvatar(
-                      backgroundColor: Colors.grey,
-                      radius: 20,
-                      child: Center(
-                        child: Icon(
-                          Icons.person,
-                          color: Colors.white,
-                          size: 15,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: 5.0,
-                        right: 15,
-                      ),
-                      child: Text('Namal Perea',
-                          style: TextStyle(color: Colors.white, fontSize: 14)),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 15.0, right: 15, top: 5, bottom: 5),
-              child: Card(
-                color: Theme.of(context).shadowColor,
-                child: Container(
-                  height: 200,
-                  width: width,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Mechanic Required',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          'Requirements\n sample description\n samlpe description',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                          ),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                      Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 20.0,
-                          bottom: 10,
-                          left: 15,
-                          right: 15,
-                        ),
-                        child: GestureDetector(
-                          child: Container(
-                            height: 40,
-                            width: width,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).buttonColor,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Center(
-                              child: Text('Accept Job',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).backgroundColor,
-                                    fontSize: 14,
-                                  )),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
-              child: Container(
-                width: width,
-                height: 30,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    CircleAvatar(
-                      backgroundColor: Colors.grey,
-                      radius: 20,
-                      child: Center(
-                        child: Icon(
-                          Icons.person,
-                          color: Colors.white,
-                          size: 15,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: 5.0,
-                        right: 15,
-                      ),
-                      child: Text('Namal Perea',
-                          style: TextStyle(color: Colors.white, fontSize: 14)),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Card(
-                color: Theme.of(context).shadowColor,
-                child: Container(
-                  height: 200,
-                  width: width,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Card(
-                color: Theme.of(context).shadowColor,
-                child: Container(
-                  height: 200,
-                  width: width,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Card(
-                color: Theme.of(context).shadowColor,
-                child: Container(
-                  height: 200,
-                  width: width,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-            ),
+            jobRequestTile(context, 'Namal', 'Rajapakse', 'portfolio1'),
+            jobRequestTile(context, 'Keshan', 'Gunathunga', 'portfolio2'),
+            jobRequestTile(context, 'Wanidu', 'Hasaranga', 'portfolio3'),
+            jobRequestTile(context, 'Chaminda', 'Vaas', 'portfolio1'),
+            jobRequestTile(context, 'Gihan', 'Perera', 'portfolio2'),
           ],
         ),
       ),

@@ -58,11 +58,11 @@ flutter:
   assets:
    - assets/images/HandymanBusiness.png
    - assets/images/Handyman.png
-   - assets/images/portfolio1.jpg  
+   - assets/images/portfolio1.jpeg  
    - assets/images/portfolio2.jpeg  
-   - assets/images/portfolio3.jpg  
-   - assets/images/services1.jpg  
-   - assets/images/services2.jpg  
+   - assets/images/portfolio3.jpeg  
+   - assets/images/services1.jpeg  
+   - assets/images/services2.jpeg  
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
