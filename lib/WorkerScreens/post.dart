@@ -67,11 +67,22 @@ class _PostScreenState extends State<PostScreen> {
                 ],
               ),
             ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('+ Add  Advertisement',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).buttonColor,
+                      fontSize: 14,
+                    )),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Container(
                 width: width,
-                height: height * 0.5,
+                height: height * 0.6,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(5),
@@ -81,17 +92,26 @@ class _PostScreenState extends State<PostScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      height: 200,
+                      height: 250,
                       width: width,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(25),
                         color: Theme.of(context).shadowColor,
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.asset(
+                          'assets/images/ad.jpg',
+                          height: 80.0,
+                          width: 80.0,
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Sample description Sample description Sample description Sample description',
+                        'This is a dummy description of the advertisement i\'am going to share. I can edit the text and change advertisement cover',
                         style: TextStyle(color: Colors.black),
                         textAlign: TextAlign.start,
                       ),
@@ -102,7 +122,7 @@ class _PostScreenState extends State<PostScreen> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Jobs completed:',
+                            'Jobs completed: 10',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
@@ -136,11 +156,11 @@ class _PostScreenState extends State<PostScreen> {
                               fontWeight: FontWeight.bold),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
