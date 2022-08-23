@@ -8,8 +8,9 @@ import 'package:handyman/WorkerScreens/navigations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:progress_indicator_button/progress_button.dart';
 import 'dart:io';
-
+import 'package:path/path.dart';
 import '../services/authservice.dart';
 // import 'package:handyman/CustomerScreens/home.dart';
 // import 'package:handyman/CustomerScreens/navigation.dart';
@@ -22,7 +23,7 @@ class FinalSignupscreen extends StatefulWidget {
 
 class _FinalSignupscreenState extends State<FinalSignupscreen> {
   File _image;
-  String propicUrl, NicFrontUrl, NicBackUrl;
+  String propicUrl, NicFrontUrl, NicBackUrl, nicFName, nicBName;
   var pickedImage, NicFront, NicBack;
 
   void selectFile() async {
@@ -44,6 +45,13 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
     final picker = ImagePicker();
     try {
       NicFront = await picker.getImage(source: ImageSource.camera);
+      setState(() {
+        if (NicFront != null) {
+          nicFName = basename(NicFront.path);
+        } else {
+          print('No image selected.');
+        }
+      });
     } on PlatformException catch (e, s) {
     } on Exception catch (e, s) {}
   }
@@ -52,6 +60,13 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
     final picker = ImagePicker();
     try {
       NicBack = await picker.getImage(source: ImageSource.camera);
+      setState(() {
+        if (NicBack != null) {
+          nicBName = basename(NicBack.path);
+        } else {
+          print('No image selected.');
+        }
+      });
     } on PlatformException catch (e, s) {
     } on Exception catch (e, s) {}
   }
@@ -65,7 +80,7 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
           resourceType: CloudinaryResourceType.Auto,
         );
         propicUrl = response.url;
-        uploadPropicDataOnMongo(data[3], propicUrl);
+        uploadPropicDataOnMongo(data[1], propicUrl);
       }
     }
     return response;
@@ -80,7 +95,7 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
           resourceType: CloudinaryResourceType.Auto,
         );
         NicFrontUrl = response.url;
-        uploadNicFrontDataOnMongo(data[3], NicFrontUrl);
+        uploadNicFrontDataOnMongo(data[1], NicFrontUrl);
       }
     }
     return response;
@@ -95,7 +110,7 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
           resourceType: CloudinaryResourceType.Auto,
         );
         NicBackUrl = response.url;
-        uploadNicBackDataOnMongo(data[3], NicBackUrl);
+        uploadNicBackDataOnMongo(data[1], NicBackUrl);
       }
     }
     return response;
@@ -167,6 +182,29 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    void httpJob(AnimationController controller) async {
+      controller.forward();
+      await prepareUpload();
+      await prepareUploadNicBack();
+      await prepareUploadNicFront();
+
+      await AuthService().addUserWorker(data).then((val) {
+        if (val.data['success']) {
+          Navigator.of(context).pushNamed(LoginScreen.routeName);
+
+          Fluttertoast.showToast(
+              msg: 'Successfully Registered',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Theme.of(context).buttonColor,
+              textColor: Theme.of(context).shadowColor,
+              fontSize: 16.0);
+        }
+      });
+      controller.reset();
+    }
+
     data = ModalRoute.of(context).settings.arguments as List;
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
@@ -380,29 +418,6 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
                     right: 15,
                   ),
                   child: GestureDetector(
-                    onTap: () {
-                      prepareUpload();
-                      prepareUploadNicFront();
-                      prepareUploadNicBack();
-
-                      data.add(valueChooseJobType);
-                      print(data);
-                      AuthService().addUserWorker(data).then((val) {
-                        if (val.data['success']) {
-                          Navigator.of(context)
-                              .pushNamed(LoginScreen.routeName);
-
-                          Fluttertoast.showToast(
-                              msg: 'Successfully Registered',
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Theme.of(context).buttonColor,
-                              textColor: Theme.of(context).shadowColor,
-                              fontSize: 16.0);
-                        }
-                      });
-                    },
                     child: Container(
                       height: 46,
                       width: width,
@@ -410,13 +425,18 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
                         color: Theme.of(context).buttonColor,
                         borderRadius: BorderRadius.circular(5),
                       ),
-                      child: Center(
-                        child: Text('Submit',
-                            style: TextStyle(
-                                color: Theme.of(context).backgroundColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500)),
-                      ),
+                      child: ProgressButton(
+                          color: Theme.of(context).buttonColor,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          child: Text('Submit',
+                              style: TextStyle(
+                                  color: Theme.of(context).backgroundColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500)),
+                          onPressed: (AnimationController controller) async {
+                            data.add(valueChooseJobType);
+                            await httpJob(controller);
+                          }),
                     ),
                   ),
                 ),
