@@ -261,33 +261,36 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
                     children: [
                       Center(
                         child: GestureDetector(
-                          onTap: () => selectFile(),
                           child: CircleAvatar(
                             backgroundColor: Colors.grey,
-                            backgroundImage: _image == null
-                                ? AssetImage('assets/images/Handyman.png')
-                                : FileImage(_image),
+                            backgroundImage:
+                                _image == null ? null : FileImage(_image),
                             radius: 50,
-                            child: Center(
-                              child: Icon(
-                                Icons.person,
-                                color: Colors.white,
-                                size: 40,
-                              ),
-                            ),
+                            child: _image == null
+                                ? Center(
+                                    child: Icon(
+                                      Icons.person,
+                                      color: Colors.white,
+                                      size: 40,
+                                    ),
+                                  )
+                                : null,
                           ),
                         ),
                       ),
                       Positioned(
-                        bottom: 5,
-                        right: 110,
+                        bottom: 0,
+                        right: 120,
                         child: CircleAvatar(
                           radius: 20,
                           backgroundColor: Theme.of(context).buttonColor,
                           child: Center(
-                            child: Icon(
-                              Icons.camera_alt_rounded,
+                            child: IconButton(
+                              icon: Icon(Icons.camera_alt_rounded),
                               color: Theme.of(context).backgroundColor,
+                              onPressed: (() {
+                                selectFile();
+                              }),
                             ),
                           ),
                         ),
@@ -422,7 +425,7 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
                       height: 46,
                       width: width,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).buttonColor,
+                        // color: Theme.of(context).buttonColor,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: ProgressButton(

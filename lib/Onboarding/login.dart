@@ -4,6 +4,7 @@ import 'package:handyman/Onboarding/signup.dart';
 import 'package:handyman/WorkerScreens/home.dart';
 import 'package:handyman/WorkerScreens/navigations.dart';
 import 'package:progress_indicator_button/progress_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/authservice.dart';
 // import 'package:handymanbu/Onboarding/signup.dart';
@@ -18,6 +19,25 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   var email, password, token;
   @override
+  void redirectIfLoggedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var tokenCheck = prefs.getString('token');
+    if (tokenCheck != null) {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => NavigationScreen()));
+    }
+  }
+
+  void keepLoggedIn(token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('token', token);
+  }
+
+  void initState() {
+    super.initState();
+    redirectIfLoggedIn();
+  }
+
   Widget build(BuildContext context) {
     void httpJob(AnimationController controller) async {
       controller.forward();
@@ -25,7 +45,8 @@ class _LoginScreenState extends State<LoginScreen> {
       await AuthService().loginWorker(email, password).then((val) {
         if (val.data['success']) {
           token = val.data['token'];
-          Navigator.of(context).push(
+          keepLoggedIn(token);
+          Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => NavigationScreen()));
         } else {
           Fluttertoast.showToast(
