@@ -39,8 +39,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
   }
 
   void getCustomerAds() {
-    AuthService().getCustomerAds("Plumber").then((val) {
-      print(val);
+    AuthService().getCustomerAds("Mechanics").then((val) {
+      print(val.data["job"]);
     });
   }
 

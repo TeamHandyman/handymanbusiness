@@ -82,7 +82,7 @@ class _PostScreenState extends State<PostScreen> {
               padding: const EdgeInsets.all(15.0),
               child: Container(
                 width: width,
-                height: height * 0.6,
+                height: height * 0.48,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(5),
