@@ -33,18 +33,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    getCustomerAds();
-  }
-
-  void getCustomerAds() {
-    AuthService().getCustomerAds("Mechanics").then((val) {
-      print(val.data["job"]);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedPageIndex],

@@ -1,12 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_typing_uninitialized_variables, avoid_print, unused_catch_stack
 
+import 'package:cloudinary/cloudinary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:handyman/Onboarding/login.dart';
 import 'package:handyman/WorkerScreens/navigations.dart';
 // import 'package:handyman/services/authservice.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:cloudinary_public/cloudinary_public.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:progress_indicator_button/progress_button.dart';
 import 'dart:io';
@@ -23,7 +24,7 @@ class FinalSignupscreen extends StatefulWidget {
 
 class _FinalSignupscreenState extends State<FinalSignupscreen> {
   File _image;
-  String propicUrl, NicFrontUrl, NicBackUrl, nicFName, nicBName;
+  String nicFName, nicBName;
   var pickedImage, NicFront, NicBack;
 
   void selectFile() async {
@@ -77,10 +78,9 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
       if (pickedImage.path != null) {
         response = await uploadFileOnCloudinary(
           filePath: pickedImage.path,
-          resourceType: CloudinaryResourceType.Auto,
+          resourceType: CloudinaryResourceType.image,
         );
-        propicUrl = response.url;
-        uploadPropicDataOnMongo(data[1], propicUrl);
+        data.add(response.url);
       }
     }
     return response;
@@ -90,12 +90,11 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
     CloudinaryResponse response;
     if (NicFront != null) {
       if (NicFront.path != null) {
-        response = await uploadFileOnCloudinary(
+        response = await uploadNicFrontDataOnMongo(
           filePath: NicFront.path,
-          resourceType: CloudinaryResourceType.Auto,
+          resourceType: CloudinaryResourceType.image,
         );
-        NicFrontUrl = response.url;
-        uploadNicFrontDataOnMongo(data[1], NicFrontUrl);
+        data.add(response.url);
       }
     }
     return response;
@@ -105,12 +104,11 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
     CloudinaryResponse response;
     if (NicBack != null) {
       if (NicBack.path != null) {
-        response = await uploadFileOnCloudinary(
+        response = await uploadNicBackDataOnMongo(
           filePath: NicBack.path,
-          resourceType: CloudinaryResourceType.Auto,
+          resourceType: CloudinaryResourceType.image,
         );
-        NicBackUrl = response.url;
-        uploadNicBackDataOnMongo(data[1], NicBackUrl);
+        data.add(response.url);
       }
     }
     return response;
@@ -119,42 +117,86 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
   Future<CloudinaryResponse> uploadFileOnCloudinary(
       {String filePath, CloudinaryResourceType resourceType}) async {
     CloudinaryResponse response;
-    try {
-      var cloudinary =
-          CloudinaryPublic('projecthandyman', 'p5r8psil', cache: false);
-      response = await cloudinary.uploadFile(
-        CloudinaryFile.fromFile(filePath, resourceType: resourceType),
-      );
-    } on CloudinaryException catch (e, s) {
-      print(e.message);
-      print(e.request);
-    }
+    var cloudinary = Cloudinary.signedConfig(
+        apiKey: '461133995855746',
+        apiSecret: '-QpKX775LFGsnxH4csUfswOTQl4',
+        cloudName: 'projecthandyman');
+    response = await cloudinary.upload(
+      file: filePath,
+      fileBytes: _image.readAsBytesSync(),
+      resourceType: CloudinaryResourceType.image,
+      folder: 'profile images',
+      fileName: data[1],
+      // progressCallback: (count, total) {
+      //   print('Uploading image from file with progress: $count/$total');
+      // },
+    );
     return response;
   }
 
-  void uploadPropicDataOnMongo(email, url) {
-    AuthService().uploadPropic(email, url).then((val) {
-      if (val.data['success']) {
-        print('Successfully Uploaded');
-      }
-    });
+  Future<CloudinaryResponse> uploadNicBackDataOnMongo(
+      {String filePath, CloudinaryResourceType resourceType}) async {
+    CloudinaryResponse response;
+    var cloudinary = Cloudinary.signedConfig(
+        apiKey: '461133995855746',
+        apiSecret: '-QpKX775LFGsnxH4csUfswOTQl4',
+        cloudName: 'projecthandyman');
+    response = await cloudinary.upload(
+      file: filePath,
+      fileBytes: File(NicBack.path).readAsBytesSync(),
+      resourceType: CloudinaryResourceType.image,
+      folder: 'nic images',
+      fileName: data[1] + '_NICBACK',
+      // progressCallback: (count, total) {
+      //   print('Uploading image from file with progress: $count/$total');
+      // },
+    );
+    return response;
   }
 
-  void uploadNicFrontDataOnMongo(email, url) {
-    AuthService().uploadNicFront(email, url).then((val) {
-      if (val.data['success']) {
-        print('Successfully Uploaded');
-      }
-    });
+  Future<CloudinaryResponse> uploadNicFrontDataOnMongo(
+      {String filePath, CloudinaryResourceType resourceType}) async {
+    CloudinaryResponse response;
+    var cloudinary = Cloudinary.signedConfig(
+        apiKey: '461133995855746',
+        apiSecret: '-QpKX775LFGsnxH4csUfswOTQl4',
+        cloudName: 'projecthandyman');
+    response = await cloudinary.upload(
+      file: filePath,
+      fileBytes: File(NicFront.path).readAsBytesSync(),
+      resourceType: CloudinaryResourceType.image,
+      folder: 'nic images',
+      fileName: data[1] + '_NICFRONT',
+      // progressCallback: (count, total) {
+      //   print('Uploading image from file with progress: $count/$total');
+      // },
+    );
+    return response;
   }
 
-  void uploadNicBackDataOnMongo(email, url) {
-    AuthService().uploadNicBack(email, url).then((val) {
-      if (val.data['success']) {
-        print('Successfully Uploaded');
-      }
-    });
-  }
+  // void uploadPropicDataOnMongo(email, url) {
+  //   AuthService().uploadPropic(email, url).then((val) {
+  //     if (val.data['success']) {
+  //       print('Successfully Uploaded');
+  //     }
+  //   });
+  // }
+
+  // void uploadNicFrontDataOnMongo(email, url) {
+  //   AuthService().uploadNicFront(email, url).then((val) {
+  //     if (val.data['success']) {
+  //       print('Successfully Uploaded');
+  //     }
+  //   });
+  // }
+
+  // void uploadNicBackDataOnMongo(email, url) {
+  //   AuthService().uploadNicBack(email, url).then((val) {
+  //     if (val.data['success']) {
+  //       print('Successfully Uploaded');
+  //     }
+  //   });
+  // }
 
   List data;
   String valueChooseJobType;
@@ -184,9 +226,9 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
   Widget build(BuildContext context) {
     void httpJob(AnimationController controller) async {
       controller.forward();
-      await prepareUpload();
       await prepareUploadNicBack();
       await prepareUploadNicFront();
+      await prepareUpload();
 
       await AuthService().addUserWorker(data).then((val) {
         if (val.data['success']) {

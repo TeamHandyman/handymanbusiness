@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handyman/WorkerScreens/WorkerSubscreens/viewjob.dart';
 import 'package:handyman/services/authservice.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/homescreen';
@@ -11,8 +12,21 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String title, desc, workerType;
-
+  List<dynamic> ads = [];
+  final DateFormat formatter = DateFormat('yyyy-MM-dd');
   @override
+  void getCustomerAds() async {
+    await AuthService().getCustomerAds("A/C").then((val) {
+      ads = val.data["job"];
+    });
+    setState(() {});
+  }
+
+  void initState() {
+    super.initState();
+    getCustomerAds();
+  }
+
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
@@ -40,8 +54,29 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    Widget jobRequestTile(BuildContext context, String fname, String lname,
-        String image, String city, String job, String date) {
+    Widget jobRequestTile(
+        BuildContext context,
+        String fname,
+        String lname,
+        String proPic,
+        String city,
+        String job,
+        DateTime date,
+        String title,
+        String desc,
+        String mainImgUrl,
+        String oneSignalID) {
+      List ad_data = [
+        title,
+        desc,
+        city,
+        job,
+        date,
+        mainImgUrl,
+        oneSignalID,
+        fname,
+        lname
+      ];
       return Column(
         children: [
           Padding(
@@ -56,13 +91,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   CircleAvatar(
                     backgroundColor: Colors.grey,
                     radius: 20,
-                    backgroundImage: AssetImage('assets/images/services1.jpeg'),
+                    backgroundImage: proPic != "" ? NetworkImage(proPic) : null,
                     child: Center(
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.white,
-                        size: 15,
-                      ),
+                      child: proPic == ""
+                          ? Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 15,
+                            )
+                          : null,
                     ),
                   ),
                   Padding(
@@ -94,7 +131,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding:
                           const EdgeInsets.only(left: 15.0, top: 15, right: 15),
-                      child: Text('Mechanic Required',
+                      child: Text(title,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -111,7 +149,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         detailsRow(context, city, Icons.location_on),
                         detailsRow(context, job, Icons.man),
-                        detailsRow(context, date, Icons.calendar_month),
+                        detailsRow(context, formatter.format(date),
+                            Icons.calendar_month),
                       ],
                     ),
                     Padding(
@@ -121,8 +160,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(8.0),
-                            child: Image.asset(
-                              'assets/images/${image}.jpeg',
+                            child: Image.network(
+                              mainImgUrl,
                               height: 80.0,
                               width: 80.0,
                               fit: BoxFit.fill,
@@ -133,7 +172,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Container(
                               width: 180,
                               child: Text(
-                                'This is a dummy description of the requirement of the customer',
+                                desc,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,
@@ -154,8 +194,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         right: 15,
                       ),
                       child: GestureDetector(
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(ViewJobScreen.routeName),
+                        onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => ViewJobScreen(),
+                                settings: RouteSettings(arguments: ad_data))),
                         child: Container(
                           height: 40,
                           width: width,
@@ -292,16 +334,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ],
             ),
-            jobRequestTile(context, 'Namal', 'Rajapakse', 'portfolio1',
-                'Kaduwela', 'Mechanic', 'Jun 07'),
-            jobRequestTile(context, 'Keshan', 'Gunathunga', 'portfolio2',
-                'Malabe', 'Carpentry', 'Jul 17'),
-            jobRequestTile(context, 'Wanidu', 'Hasaranga', 'portfolio3',
-                'Athurugiriya', 'Mechanic', 'Jun 27'),
-            jobRequestTile(context, 'Chaminda', 'Vaas', 'portfolio1',
-                'Battaramulla', 'Mechanic', 'Jun 20'),
-            jobRequestTile(context, 'Gihan', 'Perera', 'portfolio2', 'Kaduwela',
-                'Mechanic', 'Jun 07'),
+            for (var i in ads)
+              jobRequestTile(
+                  context,
+                  i['fName'],
+                  i['lName'],
+                  i['proPic'] != "" ? i['proPic'] : "",
+                  'Kaduwela',
+                  i['workerType'],
+                  DateTime.parse(i['date']),
+                  i['title'],
+                  i['description'],
+                  i['urls'][0],
+                  i['oneSignalID']),
           ],
         ),
       ),
