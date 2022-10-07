@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:handyman/services/authservice.dart';
+import 'package:intl/intl.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:progress_indicator_button/progress_button.dart';
+
+import '../../Onboarding/login.dart';
 
 class ViewJobScreen extends StatefulWidget {
   static const routeName = '/viewjobscreen';
@@ -8,10 +15,25 @@ class ViewJobScreen extends StatefulWidget {
 }
 
 class _ViewJobScreenState extends State<ViewJobScreen> {
+  final DateFormat formatter = DateFormat('yyyy-MM-dd');
+
   @override
   Widget build(BuildContext context) {
+    List ad_data = ModalRoute.of(context).settings.arguments as List;
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
+    void httpJob(AnimationController controller) async {
+      controller.forward();
+      var msg = "You have recieved a job request from " +
+          ad_data[7] +
+          " " +
+          ad_data[8] +
+          ".";
+
+      await AuthService().sendPushNotification(ad_data[6], msg);
+      controller.reset();
+    }
 
     Widget detailsRow(BuildContext context, String text, IconData icon) {
       return Padding(
@@ -48,7 +70,7 @@ class _ViewJobScreenState extends State<ViewJobScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 15.0, right: 15, bottom: 5),
               child: Text(
-                'Mechanic Required',
+                ad_data[0],
                 style: TextStyle(color: Colors.white, fontSize: 30),
               ),
             ),
@@ -60,8 +82,8 @@ class _ViewJobScreenState extends State<ViewJobScreen> {
                 width: width,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: Image.asset(
-                    'assets/images/portfolio1.jpeg',
+                  child: Image.network(
+                    ad_data[5],
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -70,9 +92,10 @@ class _ViewJobScreenState extends State<ViewJobScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                detailsRow(context, 'Kaduwela', Icons.location_on),
-                detailsRow(context, 'Mechanic', Icons.man),
-                detailsRow(context, 'Jun 15', Icons.calendar_month),
+                detailsRow(context, ad_data[2], Icons.location_on),
+                detailsRow(context, ad_data[3], Icons.man),
+                detailsRow(context, formatter.format(ad_data[4]),
+                    Icons.calendar_month),
               ],
             ),
             Padding(
@@ -88,7 +111,7 @@ class _ViewJobScreenState extends State<ViewJobScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 40, right: 40, top: 5),
                     child: Text(
-                      'Looking for a mechanic to fix several electric items. Refrigerator, television etc. Someone near Kaduwela',
+                      ad_data[1],
                       style: TextStyle(color: Colors.white),
                     ),
                   )
@@ -98,20 +121,25 @@ class _ViewJobScreenState extends State<ViewJobScreen> {
             // Spacer(),
             Padding(
               padding: const EdgeInsets.only(left: 40.0, right: 40, top: 10),
-              child: Container(
-                height: 40,
-                width: width,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).buttonColor,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Center(
-                  child: Text('Accept Job',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).backgroundColor,
-                        fontSize: 14,
-                      )),
+              child: GestureDetector(
+                child: Container(
+                  height: 40,
+                  width: width,
+                  decoration: BoxDecoration(
+                    // color: Theme.of(context).buttonColor,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: ProgressButton(
+                      color: Theme.of(context).buttonColor,
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      child: Text('Accept Job',
+                          style: TextStyle(
+                              color: Theme.of(context).backgroundColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500)),
+                      onPressed: (AnimationController controller) async {
+                        await httpJob(controller);
+                      }),
                 ),
               ),
             ),
