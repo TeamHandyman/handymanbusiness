@@ -105,6 +105,64 @@ class AuthService {
     }
   }
 
+  acceptCustomerJob(id, email) async {
+    try {
+      return await dio.post(
+        'https://projecthandyman.herokuapp.com/acceptCustomerJob',
+        data: {
+          "id": id,
+          "email": email,
+        },
+      );
+    } on DioError catch (e) {
+      Fluttertoast.showToast(
+          msg: e.response.data['msg'],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  getAcceptedStateCustomerJob(id) async {
+    try {
+      return await dio.post(
+        'https://projecthandyman.herokuapp.com/getAcceptedStateCustomerJob',
+        data: {
+          "id": id,
+        },
+      );
+    } on DioError catch (e) {
+      Fluttertoast.showToast(
+          msg: e.response.data['msg'],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  // getCustomerJobStatus(id) async {
+  //   try {
+  //     return await dio.post(
+  //       'https://projecthandyman.herokuapp.com/getCustomerJobStatus',
+  //       data: {
+  //         "id": id,
+  //       },
+  //     );
+  //   } on DioError catch (e) {
+  //     Fluttertoast.showToast(
+  //         msg: e.response.data['msg'],
+  //         toastLength: Toast.LENGTH_SHORT,
+  //         gravity: ToastGravity.BOTTOM,
+  //         backgroundColor: Colors.red,
+  //         textColor: Colors.white,
+  //         fontSize: 16.0);
+  //   }
+  // }
+
   uploadNicFront(email, url) async {
     try {
       return await dio.post(

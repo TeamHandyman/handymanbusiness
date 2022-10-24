@@ -16,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
   @override
   void getCustomerAds() async {
-    await AuthService().getCustomerAds("A/C").then((val) {
+    await AuthService().getCustomerAds("Landscaping").then((val) {
       ads = val.data["job"];
     });
     setState(() {});
@@ -56,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     Widget jobRequestTile(
         BuildContext context,
+        String id,
         String fname,
         String lname,
         String proPic,
@@ -65,7 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
         String title,
         String desc,
         String mainImgUrl,
-        String oneSignalID) {
+        String oneSignalID,
+        String jobStatus) {
       List ad_data = [
         title,
         desc,
@@ -194,10 +196,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         right: 15,
                       ),
                       child: GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => ViewJobScreen(),
-                                settings: RouteSettings(arguments: ad_data))),
+                        onTap: () {
+                          ad_data.add(id);
+                          ad_data.add(jobStatus);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ViewJobScreen(),
+                              settings: RouteSettings(arguments: ad_data)));
+                        },
                         child: Container(
                           height: 40,
                           width: width,
@@ -337,6 +342,7 @@ class _HomeScreenState extends State<HomeScreen> {
             for (var i in ads)
               jobRequestTile(
                   context,
+                  i['_id'],
                   i['fName'],
                   i['lName'],
                   i['proPic'] != "" ? i['proPic'] : "",
@@ -346,7 +352,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   i['title'],
                   i['description'],
                   i['urls'][0],
-                  i['oneSignalID']),
+                  i['oneSignalID'],
+                  i['jobStatus']),
           ],
         ),
       ),
