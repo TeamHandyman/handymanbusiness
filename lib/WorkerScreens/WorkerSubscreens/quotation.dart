@@ -135,7 +135,7 @@ class _QuotationScreenState extends State<QuotationScreen> {
                     decoration: InputDecoration(
                       labelText: chooseRevenueMethod == revenueMethods[0]
                           ? 'Hourly rate not available in contract basis mode'
-                          : 'Hourly rate',
+                          : 'Hourly Rate',
                       fillColor: Colors.white,
                       enabled: chooseRevenueMethod == revenueMethods[0]
                           ? false
@@ -162,6 +162,48 @@ class _QuotationScreenState extends State<QuotationScreen> {
                       ),
                     ),
                     keyboardType: TextInputType.number,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      labelText: chooseRevenueMethod == revenueMethods[1]
+                          ? 'Estimated total not available in hourly rate mode'
+                          : 'Estimated Total',
+                      labelStyle: TextStyle(
+                          color: chooseRevenueMethod == revenueMethods[1]
+                              ? Colors.white54
+                              : Colors.white,
+                          fontStyle: chooseRevenueMethod == revenueMethods[1]
+                              ? FontStyle.italic
+                              : FontStyle.normal),
+                      enabled: chooseRevenueMethod == revenueMethods[1]
+                          ? false
+                          : true,
+                      disabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white54),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Theme.of(context).shadowColor),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    // maxLines: 5,
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter a total';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 Padding(
@@ -226,33 +268,6 @@ class _QuotationScreenState extends State<QuotationScreen> {
                       ),
                       // enabledBorder: InputBorder(borderSide: )
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      labelText: 'Estimated total',
-                      labelStyle: TextStyle(color: Colors.white),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Theme.of(context).shadowColor),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
-                    maxLines: 5,
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter a total';
-                      }
-                      return null;
-                    },
                   ),
                 ),
                 Padding(
