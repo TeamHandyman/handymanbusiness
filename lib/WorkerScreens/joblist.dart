@@ -223,8 +223,7 @@ class _JoblistScreenState extends State<JoblistScreen>
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
-                        child: ListView(
-                          scrollDirection: Axis.vertical,
+                        child: Column(
                           children: [
                             jobCard(context, 'Completed', Colors.green[600]),
                             jobCard(context, 'Started', Colors.amber[900]),
