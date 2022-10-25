@@ -37,6 +37,53 @@ class AuthService {
     }
   }
 
+  workerUpdateQuotation(data, name) async {
+    try {
+      return await dio.post(
+        'https://projecthandyman.herokuapp.com/workerUpdateQuotation',
+        data: {
+          "id": data[1],
+          "revenueMethod": data[2],
+          "rateOrTotal": data[3],
+          "description": data[4],
+          "estimatedDate": data[5].toString(),
+          "imgUrl": data[6],
+          "workerName": name
+        },
+      );
+    } on DioError catch (e) {
+      print(e.toString());
+    }
+  }
+
+  updateWorkerAdDesc(desc, email) async {
+    try {
+      return await dio.post(
+        'https://projecthandyman.herokuapp.com/updateWorkerAdDesc',
+        data: {
+          "desc": desc,
+          "email": email,
+        },
+      );
+    } on DioError catch (e) {
+      print(e.toString());
+    }
+  }
+
+  updateWorkerAdImg(url, email) async {
+    try {
+      return await dio.post(
+        'https://projecthandyman.herokuapp.com/updateWorkerAdImg',
+        data: {
+          "url": url,
+          "email": email,
+        },
+      );
+    } on DioError catch (e) {
+      print(e.toString());
+    }
+  }
+
   loginWorker(email, password) async {
     try {
       return await dio.post(
@@ -90,10 +137,7 @@ class AuthService {
     try {
       return await dio.get(
           'https://projecthandyman.herokuapp.com/sendPushNotification',
-          queryParameters: {
-            'device': ["7d5d6d42-9ff6-47d1-8559-a4a4be972dac"],
-            'msg': msg
-          });
+          queryParameters: {'device': id, 'msg': msg});
     } on DioError catch (e) {
       Fluttertoast.showToast(
           msg: e.response.data['msg'],
@@ -133,6 +177,21 @@ class AuthService {
           "id": id,
         },
       );
+    } on DioError catch (e) {
+      Fluttertoast.showToast(
+          msg: e.response.data['msg'],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  getWorkerNotificationsForQuotationRequests(email) async {
+    try {
+      return await dio.get(
+          'https://projecthandyman.herokuapp.com/getWorkerNotificationsForQuotationRequests?email=$email');
     } on DioError catch (e) {
       Fluttertoast.showToast(
           msg: e.response.data['msg'],

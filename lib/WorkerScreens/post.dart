@@ -1,8 +1,14 @@
+import 'package:cloudinary/cloudinary.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:handyman/services/authservice.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'dart:ffi';
 import 'dart:io';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PostScreen extends StatefulWidget {
   static const routeName = '/postscreen';
@@ -13,23 +19,109 @@ class PostScreen extends StatefulWidget {
 
 class _PostScreenState extends State<PostScreen> {
   final _form = GlobalKey<FormState>();
-  var editedstr;
+  var editedstr, desc = "Add a description...", imgUrl;
   File _image;
-  final picker = ImagePicker();
+  List data = [];
   var _clicked = false;
 
-  void _saveForm() {
+  void _saveForm() async {
     _form.currentState.save();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    Map<String, dynamic> payload = Jwt.parseJwt(token);
+    var email = payload['email'];
+    prefs.setString('workerAdDesc', editedstr);
+    await AuthService().updateWorkerAdDesc(editedstr, email).then((val) {
+      Fluttertoast.showToast(
+          msg: "Description Changed",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 3,
+          backgroundColor: Theme.of(context).buttonColor,
+          textColor: Colors.black,
+          fontSize: 16.0);
+    });
   }
 
-  void _takePicture() async {
-    final _pickedImage = await picker.getImage(source: ImageSource.gallery);
-    setState(() {
-      _image = File(_pickedImage.path);
-      print('image picked');
-      print(_image);
-    });
-    //if (_pickedImage.path == null) retrieveLostData();
+  void getDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    imgUrl = prefs.getString('workerAdImgUrl');
+    desc = prefs.getString('workerAdDesc');
+
+    setState(() {});
+  }
+
+  void initState() {
+    super.initState();
+    getDetails();
+  }
+
+  final picker = ImagePicker();
+  var pickedImage;
+
+  void selectFile() async {
+    final picker = ImagePicker();
+    try {
+      pickedImage = await picker.getImage(source: ImageSource.gallery);
+      setState(() {
+        if (pickedImage != null) {
+          _image = File(pickedImage.path);
+          prepareUpload();
+        } else {
+          print('No image selected.');
+        }
+      });
+    } on PlatformException catch (e, s) {
+    } on Exception catch (e, s) {}
+  }
+
+  Future<CloudinaryResponse> prepareUpload() async {
+    CloudinaryResponse response;
+    if (pickedImage != null) {
+      if (pickedImage.path != null) {
+        response = await uploadFileOnCloudinary(
+          filePath: pickedImage.path,
+          resourceType: CloudinaryResourceType.image,
+        );
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        var token = prefs.getString('token');
+        Map<String, dynamic> payload = Jwt.parseJwt(token);
+        var email = payload['email'];
+        prefs.setString('workerAdImgUrl', response.url);
+        await AuthService().updateWorkerAdImg(response.url, email).then((val) {
+          Fluttertoast.showToast(
+              msg: "Image Changed",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 3,
+              backgroundColor: Theme.of(context).buttonColor,
+              textColor: Colors.black,
+              fontSize: 16.0);
+        });
+      }
+    }
+    return response;
+  }
+
+  Future<CloudinaryResponse> uploadFileOnCloudinary(
+      {String filePath, CloudinaryResourceType resourceType}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    Map<String, dynamic> payload = Jwt.parseJwt(token);
+    var email = payload['email'];
+    CloudinaryResponse response;
+    var cloudinary = Cloudinary.signedConfig(
+        apiKey: '461133995855746',
+        apiSecret: '-QpKX775LFGsnxH4csUfswOTQl4',
+        cloudName: 'projecthandyman');
+    response = await cloudinary.upload(
+      file: filePath,
+      fileBytes: _image.readAsBytesSync(),
+      resourceType: CloudinaryResourceType.image,
+      folder: 'worker ad images',
+      fileName: email + ' adPhoto',
+    );
+    return response;
   }
 
   void _reOpen() async {}
@@ -97,103 +189,6 @@ class _PostScreenState extends State<PostScreen> {
           ),
         ),
       );
-      // return Container(
-      //   width: width * 0.9,
-      //   // color: Theme.of(context).shadowColor,
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     crossAxisAlignment: CrossAxisAlignment.center,
-      //     children: [
-      //       Container(
-      //         height: height * 0.3,
-      //         width: width * 0.8,
-      //         decoration: BoxDecoration(
-      //           borderRadius: BorderRadius.circular(15),
-      //           image: DecorationImage(
-      //               image: AssetImage('assets/images/ad.jpg'),
-      //               fit: BoxFit.fill),
-      //         ),
-      //       ),
-      //       // Align(
-      //       //   alignment: Alignment.bottomLeft,
-      //       //   child: FloatingActionButton(
-      //       //     backgroundColor: Theme.of(context).buttonColor,
-      //       //     child: IconButton(
-      //       //         onPressed: null,
-      //       //         icon: Icon(Icons.photo_size_select_actual_rounded)),
-      //       //   ),
-      //       // ),
-
-      //       Container(
-      //         width: width * 0.8,
-      //         height: 200,
-      //         color: Colors.white,
-      //         child: Column(
-      //           children: [
-      //             TextButton.icon(
-      //                 onPressed: null,
-      //                 icon: Icon(
-      //                   Icons.photo_size_select_actual_rounded,
-      //                   color: Theme.of(context).buttonColor,
-      //                 ),
-      //                 label: Text(
-      //                   'Change picture',
-      //                   style: TextStyle(
-      //                       color: Theme.of(context).buttonColor,
-      //                       fontWeight: FontWeight.bold),
-      //                 )),
-      //             Center(
-      //               child: Form(
-      //                 key: _form,
-      //                 child: ListView(
-      //                   children: <Widget>[
-      //                     TextFormField(
-      //                         decoration: InputDecoration(
-      //                           labelText: 'Click to edit your text',
-      //                         ),
-      //                         textInputAction: TextInputAction.next,
-      //                         onSaved: (newValue) {
-      //                           setState(() {
-      //                             editedstr = newValue;
-      //                           });
-      //                         }),
-      //                     SizedBox(
-      //                       height: 5,
-      //                     ),
-      //                     GestureDetector(
-      //                       onTap: () {
-      //                         _saveForm();
-
-      //                         Navigator.of(context).pop();
-      //                       },
-      //                       child: Container(
-      //                         height: 46,
-      //                         width: width * 0.7,
-      //                         decoration: BoxDecoration(
-      //                           color: Colors.black,
-      //                           // color: Theme.of(context).buttonColor,
-      //                           borderRadius: BorderRadius.circular(5),
-      //                         ),
-      //                         child: Center(
-      //                           child: Text(
-      //                             'Save',
-      //                             style: TextStyle(
-      //                                 color: Colors.white,
-      //                                 fontWeight: FontWeight.bold),
-      //                           ),
-      //                         ),
-      //                       ),
-      //                     ),
-      //                   ],
-      //                 ),
-      //               ),
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // );
     }
 
     return Scaffold(
@@ -275,49 +270,61 @@ class _PostScreenState extends State<PostScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GestureDetector(
-                      onLongPress: () {
-                        setState(() {
-                          _image = null;
-                          Fluttertoast.showToast(
-                              msg: "Image removed",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 3,
-                              backgroundColor: Theme.of(context).buttonColor,
-                              textColor: Colors.black,
-                              fontSize: 16.0);
-                        });
-                      },
-                      child: _image != null
-                          ? Container(
-                              height: 250,
-                              width: width,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Theme.of(context).shadowColor,
-                                image: DecorationImage(
-                                    image: FileImage(_image), fit: BoxFit.fill),
-                              ),
-                            )
-                          : Container(
-                              height: 250,
-                              width: width,
-                              color: Colors.grey[400],
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                    child: Icon(
-                                  Icons.image_not_supported_rounded,
-                                  size: 100,
-                                  color: Colors.black45,
-                                )),
-                              ),
-                            ),
-                    ),
+                        onLongPress: () {
+                          setState(() {
+                            _image = null;
+                            Fluttertoast.showToast(
+                                msg: "Image removed",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 3,
+                                backgroundColor: Theme.of(context).buttonColor,
+                                textColor: Colors.black,
+                                fontSize: 16.0);
+                          });
+                        },
+                        child: _image != null
+                            ? Container(
+                                height: 250,
+                                width: width,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Theme.of(context).shadowColor,
+                                  image: DecorationImage(
+                                      image: FileImage(_image),
+                                      fit: BoxFit.fill),
+                                ),
+                              )
+                            : imgUrl == null
+                                ? Container(
+                                    height: 250,
+                                    width: width,
+                                    color: Colors.grey[400],
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                          child: Icon(
+                                        Icons.image_not_supported_rounded,
+                                        size: 100,
+                                        color: Colors.black45,
+                                      )),
+                                    ),
+                                  )
+                                : Container(
+                                    height: 250,
+                                    width: width,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Theme.of(context).shadowColor,
+                                      image: DecorationImage(
+                                          image: NetworkImage(imgUrl),
+                                          fit: BoxFit.fill),
+                                    ),
+                                  )),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        editedstr == null ? 'Add a description...' : editedstr,
+                        editedstr == null ? desc : editedstr,
                         style: TextStyle(color: Colors.black),
                         textAlign: TextAlign.start,
                       ),
@@ -359,7 +366,7 @@ class _PostScreenState extends State<PostScreen> {
                           padding: const EdgeInsets.all(5.0),
                           child: GestureDetector(
                             onTap: () {
-                              _takePicture();
+                              selectFile();
                             },
                             child: Row(
                               children: [
