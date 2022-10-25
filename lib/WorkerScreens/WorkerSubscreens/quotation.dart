@@ -1,9 +1,18 @@
+import 'package:cloudinary/cloudinary.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:handyman/WorkerScreens/notifications.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'dart:ffi';
 import 'dart:io';
+
+import 'package:progress_indicator_button/progress_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../services/authservice.dart';
 
 class QuotationScreen extends StatefulWidget {
   static const routeName = '/quotationscreen';
@@ -14,25 +23,94 @@ class QuotationScreen extends StatefulWidget {
 
 class _QuotationScreenState extends State<QuotationScreen> {
   final _form = GlobalKey<FormState>();
-  var chooseRevenueMethod;
+  var chooseRevenueMethod, revMethod, hourlyRate, estTotal, desc, imgUrl;
+  List data;
+  DateTime estDate;
   List revenueMethods = [
     'Contract basis',
     'Hourly rate',
   ];
   File _image;
-  DateTime date;
-  final picker = ImagePicker();
 
-  void _takePicture() async {
-    final _pickedImage = await picker.getImage(source: ImageSource.gallery);
-    setState(() {
-      _image = File(_pickedImage.path);
+  void httpJob(AnimationController controller) async {
+    controller.forward();
+    await prepareUpload();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    Map<String, dynamic> payload = Jwt.parseJwt(token);
+    var name = payload['fName'] + ' ' + payload['lName'];
+
+    // var msg = 'You recieved a quotation from ' + name;
+    // await AuthService().sendPushNotification(data[3], msg);
+
+    await AuthService().workerUpdateQuotation(data,name).then((val) {
+      Fluttertoast.showToast(
+          msg: "Quotation Sent",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 3,
+          backgroundColor: Theme.of(context).buttonColor,
+          textColor: Colors.black,
+          fontSize: 16.0);
+      Navigator.of(context).pop();
     });
-    //if (_pickedImage.path == null) retrieveLostData();
+    controller.reset();
+  }
+
+  final picker = ImagePicker();
+  var pickedImage;
+  void selectFile() async {
+    final picker = ImagePicker();
+    try {
+      pickedImage = await picker.getImage(source: ImageSource.gallery);
+      setState(() {
+        if (pickedImage != null) {
+          _image = File(pickedImage.path);
+        } else {
+          print('No image selected.');
+        }
+      });
+    } on PlatformException catch (e, s) {
+    } on Exception catch (e, s) {}
+  }
+
+  Future<CloudinaryResponse> prepareUpload() async {
+    CloudinaryResponse response;
+    if (pickedImage != null) {
+      if (pickedImage.path != null) {
+        response = await uploadFileOnCloudinary(
+          filePath: pickedImage.path,
+          resourceType: CloudinaryResourceType.image,
+        );
+        data.add(response.url);
+      }
+    }
+    return response;
+  }
+
+  Future<CloudinaryResponse> uploadFileOnCloudinary(
+      {String filePath, CloudinaryResourceType resourceType}) async {
+    CloudinaryResponse response;
+    var cloudinary = Cloudinary.signedConfig(
+        apiKey: '461133995855746',
+        apiSecret: '-QpKX775LFGsnxH4csUfswOTQl4',
+        cloudName: 'projecthandyman');
+    response = await cloudinary.upload(
+      file: filePath,
+      fileBytes: _image.readAsBytesSync(),
+      resourceType: CloudinaryResourceType.image,
+      folder: 'quotation images',
+      fileName: data[1],
+      // progressCallback: (count, total) {
+      //   print('Uploading image from file with progress: $count/$total');
+      // },
+    );
+    return response;
   }
 
   @override
   Widget build(BuildContext context) {
+    data = ModalRoute.of(context).settings.arguments as List;
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -60,7 +138,7 @@ class _QuotationScreenState extends State<QuotationScreen> {
                     style: TextStyle(color: Colors.white),
                     enabled: false,
                     decoration: InputDecoration(
-                      labelText: 'Mechanic job| Nugegoda | Kamal ',
+                      labelText: data[0],
                       fillColor: Colors.white,
                       labelStyle: TextStyle(color: Colors.white),
                       disabledBorder: OutlineInputBorder(
@@ -115,11 +193,6 @@ class _QuotationScreenState extends State<QuotationScreen> {
                     onChanged: (newValue) {
                       setState(() {
                         chooseRevenueMethod = newValue;
-                        print('choose');
-
-                        print(chooseRevenueMethod);
-                        print('Method');
-                        print(revenueMethods[1]);
                       });
                     },
                     items: revenueMethods.map((valueItem) {
@@ -162,6 +235,9 @@ class _QuotationScreenState extends State<QuotationScreen> {
                       ),
                     ),
                     keyboardType: TextInputType.number,
+                    onChanged: (val) {
+                      hourlyRate = val;
+                    },
                   ),
                 ),
                 Padding(
@@ -198,6 +274,9 @@ class _QuotationScreenState extends State<QuotationScreen> {
                     ),
                     // maxLines: 5,
                     keyboardType: TextInputType.number,
+                    onChanged: (val) {
+                      estTotal = val;
+                    },
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Please enter a total';
@@ -225,6 +304,9 @@ class _QuotationScreenState extends State<QuotationScreen> {
                     ),
                     maxLines: 5,
                     keyboardType: TextInputType.multiline,
+                    onChanged: ((value) {
+                      desc = value;
+                    }),
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Please enter a description';
@@ -235,8 +317,8 @@ class _QuotationScreenState extends State<QuotationScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    style: TextStyle(color: Colors.white),
+                  child: DateTimeFormField(
+                    dateTextStyle: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       hintStyle: TextStyle(color: Colors.white),
                       errorStyle: TextStyle(color: Colors.redAccent),
@@ -249,14 +331,8 @@ class _QuotationScreenState extends State<QuotationScreen> {
                         color: Colors.white,
                       ),
 
-                      enabled: false,
-                      labelText: DateTime.now().toString(),
+                      labelText: 'Estimated Completion Date',
                       labelStyle: TextStyle(color: Colors.white),
-                      disabledBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Theme.of(context).shadowColor),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
                       enabledBorder: OutlineInputBorder(
                         borderSide:
                             BorderSide(color: Theme.of(context).shadowColor),
@@ -268,13 +344,20 @@ class _QuotationScreenState extends State<QuotationScreen> {
                       ),
                       // enabledBorder: InputBorder(borderSide: )
                     ),
+                    mode: DateTimeFieldPickerMode.date,
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: (e) =>
+                        (e?.day ?? 0) == 1 ? 'Please not the first day' : null,
+                    onDateSelected: (DateTime value) {
+                      estDate = value;
+                    },
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
                     onTap: () {
-                      _takePicture();
+                      selectFile();
                       Fluttertoast.showToast(
                           msg: "Tap and hold to remove image",
                           toastLength: Toast.LENGTH_SHORT,
@@ -328,21 +411,46 @@ class _QuotationScreenState extends State<QuotationScreen> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: Container(
-                    height: 46,
-                    width: width,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).buttonColor,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Center(
-                      child: Text('Send quotation',
-                          style: TextStyle(
-                              color: Theme.of(context).backgroundColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500)),
+                  padding: const EdgeInsets.only(
+                    top: 20.0,
+                    bottom: 10,
+                    left: 15,
+                    right: 15,
+                  ),
+                  child: GestureDetector(
+                    child: Container(
+                      height: 46,
+                      width: width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: ProgressButton(
+                          color: Theme.of(context).buttonColor,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          child: Text('Send Quotation',
+                              style: TextStyle(
+                                  color: Theme.of(context).backgroundColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500)),
+                          onPressed: (AnimationController controller) async {
+                            if (chooseRevenueMethod == "Hourly rate") {
+                              data.addAll([
+                                chooseRevenueMethod,
+                                hourlyRate,
+                                desc,
+                                estDate
+                              ]);
+                            } else {
+                              data.addAll([
+                                chooseRevenueMethod,
+                                estTotal,
+                                desc,
+                                estDate
+                              ]);
+                            }
+
+                            await httpJob(controller);
+                          }),
                     ),
                   ),
                 ),

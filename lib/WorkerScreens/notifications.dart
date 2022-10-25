@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:handyman/WorkerScreens/WorkerSubscreens/quotation.dart';
+import 'package:jwt_decode/jwt_decode.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../services/authservice.dart';
 
 class NotificationScreen extends StatefulWidget {
   static const routeName = '/notificationscreen';
@@ -9,13 +13,61 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
+  var quotationNotifications = [];
+  bool isLoading = true;
   @override
+  void getWorkerNotificationsForQuotationRequests() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    Map<String, dynamic> payload = Jwt.parseJwt(token);
+    var email = payload['email'];
+    await AuthService()
+        .getWorkerNotificationsForQuotationRequests(email)
+        .then((val) {
+      if (val.data["quotations"].isEmpty) {
+        isLoading = false;
+      } else {
+        isLoading = false;
+        quotationNotifications = val.data["quotations"];
+      }
+    });
+    // for (var i in jobAcceptNotificationData) {
+    //   if (!i['responses'].isEmpty) {
+    //     emailList += i['responses'];
+    //   }
+    // }
+    // for (var i in emailList) {
+    //   await AuthService().getInfo(i).then((val) {
+    //     if (val.data['success']) {
+    //       workerDetails.add(val.data["user"]);
+    //     }
+    //   });
+    // }
+
+    setState(() {});
+  }
+
+  void initState() {
+    super.initState();
+    getWorkerNotificationsForQuotationRequests();
+  }
+
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    Widget notificationCard(BuildContext context, String text, Color color) {
+
+    Widget notificationCard(BuildContext context, String text, Color color,
+        String desc, String jobTitle, String quotationId, String oneSignalId) {
+      List data = [jobTitle, quotationId];
       return GestureDetector(
-        onTap: () => Navigator.of(context).pushNamed(QuotationScreen.routeName),
+        onTap: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(
+                  builder: (context) => QuotationScreen(),
+                  settings: RouteSettings(arguments: data)))
+              .then((_) => setState(() {}));
+          ;
+        },
         child: Container(
           height: 70,
           width: width,
@@ -52,7 +104,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 5, top: 5),
                     child: Text(
-                      'This is a dummy notification',
+                      desc,
                       style: TextStyle(color: Colors.white54),
                     ),
                   ),
@@ -100,10 +152,22 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 ),
               ],
             ),
-            notificationCard(context, 'Job accepted', Colors.amber),
-            notificationCard(
-                context, 'Payment recieved', Theme.of(context).buttonColor),
-            notificationCard(context, 'New job request', Colors.green[600]),
+            isLoading
+                ? Center(
+                    child: CircularProgressIndicator(
+                      color: Theme.of(context).buttonColor,
+                    ),
+                  )
+                : Center(),
+            for (var i in quotationNotifications)
+              notificationCard(
+                  context,
+                  'Quotation Request',
+                  Colors.amber,
+                  i['customerName'] + ' requested for a quotation',
+                  i['jobTitle'],
+                  i['_id'],
+                  i['oneSignalId']),
           ],
         ),
       ),
