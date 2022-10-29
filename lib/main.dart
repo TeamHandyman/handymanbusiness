@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:handyman/Onboarding/login.dart';
+import 'package:handyman/WorkerScreens/WorkerSubscreens/confirmedjobsscreen.dart';
 import 'package:handyman/WorkerScreens/WorkerSubscreens/quotation.dart';
+import 'package:handyman/WorkerScreens/WorkerSubscreens/quotationview.dart';
 import 'package:handyman/WorkerScreens/WorkerSubscreens/viewjob.dart';
 import 'Onboarding/final.dart';
 import 'Onboarding/goodjob.dart';
@@ -25,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primaryColor: Color.fromRGBO(44, 18, 75, 1),
           backgroundColor: Color.fromRGBO(30, 30, 30, 1),
-          buttonColor: Color.fromRGBO(156, 107, 255, 1),
+          buttonColor: Color.fromRGBO(37, 150, 190, 1),
           shadowColor: Color.fromRGBO(217, 217, 217, 1)),
       routes: {
         '/': (ctx) => LoginScreen(),
@@ -40,7 +42,9 @@ class MyApp extends StatelessWidget {
         PostScreen.routeName: (ctx) => PostScreen(),
         NotificationScreen.routeName: (ctx) => NotificationScreen(),
         ViewJobScreen.routeName: (ctx) => ViewJobScreen(),
-        QuotationScreen.routeName: (ctx) => QuotationScreen()
+        QuotationScreen.routeName: (ctx) => QuotationScreen(),
+        ConfirmedJobsScreen.routeName: (ctx) => ConfirmedJobsScreen(),
+        quotationviewScreen.routeName: (ctx) => quotationviewScreen(),
       },
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handyman/WorkerScreens/WorkerSubscreens/confirmedjobsscreen.dart';
 
 class JoblistScreen extends StatefulWidget {
   static const routeName = '/joblistscreen';
@@ -57,81 +58,85 @@ class _JoblistScreenState extends State<JoblistScreen>
     Widget jobCard(BuildContext context, String status, Color progressColor) {
       return Padding(
         padding: const EdgeInsets.all(3.0),
-        child: Container(
-          height: 200,
-          width: width,
-          decoration: BoxDecoration(
-            color: Theme.of(context).shadowColor,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 15.0, right: 15, top: 15, bottom: 15),
-                child: Text(
-                  'Mechanic job | Nugegoda | Nuwan',
-                  style: TextStyle(
-                      color: Theme.of(context).backgroundColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
+        child: GestureDetector(
+          onTap: () =>
+              Navigator.of(context).pushNamed(ConfirmedJobsScreen.routeName),
+          child: Container(
+            height: 200,
+            width: width,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 15.0, right: 15, top: 15, bottom: 15),
+                  child: Text(
+                    'Mechanic job | Nugegoda | Nuwan',
+                    style: TextStyle(
+                        color: Theme.of(context).backgroundColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      bothParties(context, 'Nuwan Perera', Colors.black),
+                      // bothParties(context, 'Namal Rajapakse', Colors.purple[800]),
+                    ],
+                  ),
+                ),
+                progress(context, status, progressColor),
+                Divider(
+                  thickness: 5,
+                  color: progressColor,
+                  indent: 25,
+                  endIndent: 25,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    bothParties(context, 'Nuwan Perera', Colors.black),
-                    // bothParties(context, 'Namal Rajapakse', Colors.purple[800]),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0, right: 20),
+                      child: Text(
+                        'Date started: Jun 15',
+                        style: TextStyle(
+                            color: Theme.of(context).backgroundColor,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 14),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0, right: 20),
+                      child: Text(
+                        'Date completed: Jun 20',
+                        style: TextStyle(
+                            color: Theme.of(context).backgroundColor,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 14),
+                      ),
+                    ),
                   ],
                 ),
-              ),
-              progress(context, status, progressColor),
-              Divider(
-                thickness: 5,
-                color: progressColor,
-                indent: 25,
-                endIndent: 25,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0, right: 20),
-                    child: Text(
-                      'Date started: Jun 15',
-                      style: TextStyle(
-                          color: Theme.of(context).backgroundColor,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14),
-                    ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: Text(
+                    'Method: Contract basis',
+                    style: TextStyle(
+                        color: Theme.of(context).buttonColor,
+                        fontWeight: FontWeight.bold),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0, right: 20),
-                    child: Text(
-                      'Date completed: Jun 20',
-                      style: TextStyle(
-                          color: Theme.of(context).backgroundColor,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14),
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: Text(
-                  'Method: Contract basis',
-                  style: TextStyle(
-                      color: Theme.of(context).buttonColor,
-                      fontWeight: FontWeight.bold),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       );

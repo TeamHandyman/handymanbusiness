@@ -45,8 +45,9 @@ class _PostScreenState extends State<PostScreen> {
 
   void getDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    imgUrl = prefs.getString('workerAdImgUrl');
-    desc = prefs.getString('workerAdDesc');
+    // imgUrl =
+    //     "https://res.cloudinary.com/projecthandyman/image/upload/v1666335115/profile%20images/abcd%40gmail.com.jpg";
+    // desc = "desc";
 
     setState(() {});
   }
@@ -260,7 +261,7 @@ class _PostScreenState extends State<PostScreen> {
               padding: const EdgeInsets.all(15.0),
               child: Container(
                 width: width,
-                height: height * 0.55,
+                height: height * 0.45,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(5),

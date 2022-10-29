@@ -16,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final DateFormat formatter = DateFormat('yyyy-MM-dd');
   @override
   void getCustomerAds() async {
-    await AuthService().getCustomerAds("Landscaping").then((val) {
+    await AuthService().getCustomerAds("Plumber").then((val) {
       ads = val.data["job"];
     });
     setState(() {});
