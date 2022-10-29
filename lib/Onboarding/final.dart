@@ -45,10 +45,18 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
   void captureNicFront() async {
     final picker = ImagePicker();
     try {
-      NicFront = await picker.getImage(source: ImageSource.camera);
+      NicFront = await picker.getImage(source: ImageSource.gallery);
       setState(() {
         if (NicFront != null) {
           nicFName = basename(NicFront.path);
+          Fluttertoast.showToast(
+              msg: 'NIC Selected',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.blue,
+              textColor: Colors.white,
+              fontSize: 16.0);
         } else {
           print('No image selected.');
         }
@@ -60,9 +68,17 @@ class _FinalSignupscreenState extends State<FinalSignupscreen> {
   void captureNicBack() async {
     final picker = ImagePicker();
     try {
-      NicBack = await picker.getImage(source: ImageSource.camera);
+      NicBack = await picker.getImage(source: ImageSource.gallery);
       setState(() {
         if (NicBack != null) {
+          Fluttertoast.showToast(
+              msg: 'NIC Selected',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.blue,
+              textColor: Colors.white,
+              fontSize: 16.0);
           nicBName = basename(NicBack.path);
         } else {
           print('No image selected.');

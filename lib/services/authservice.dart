@@ -37,6 +37,30 @@ class AuthService {
     }
   }
 
+  workerPortfolio(email, imageUrls) async {
+    try {
+      return await dio.post(
+          'https://projecthandyman.herokuapp.com/workerPortfolio',
+          data: {
+            "email": email,
+            "url1": imageUrls[0],
+            "url2": imageUrls[1],
+            "url3": imageUrls[2],
+            "url4": imageUrls[3],
+            "url5": imageUrls[4],
+          },
+          options: Options(contentType: Headers.formUrlEncodedContentType));
+    } on DioError catch (e) {
+      Fluttertoast.showToast(
+          msg: e.response.data['msg'],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
   workerUpdateQuotation(data, name) async {
     try {
       return await dio.post(
@@ -266,6 +290,21 @@ class AuthService {
     try {
       return await dio.get(
           'https://projecthandyman.herokuapp.com/getCustomerAds?term=$searchTerm');
+    } on DioError catch (e) {
+      Fluttertoast.showToast(
+          msg: e.response.data['msg'],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  getConfirmedQuotationsWorker(email) async {
+    try {
+      return await dio.get(
+          'https://projecthandyman.herokuapp.com/getConfirmedQuotationsWorker?email=$email');
     } on DioError catch (e) {
       Fluttertoast.showToast(
           msg: e.response.data['msg'],

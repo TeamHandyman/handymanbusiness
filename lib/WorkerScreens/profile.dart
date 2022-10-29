@@ -1,8 +1,15 @@
 import 'dart:ffi';
 import 'dart:io';
+import 'package:cloudinary/cloudinary.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:handyman/Onboarding/login.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:jwt_decode/jwt_decode.dart';
+import 'package:progress_indicator_button/progress_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../services/authservice.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key key}) : super(key: key);
@@ -13,6 +20,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   List<File> _image = [];
+  List<String> imageUrls = [];
   final _form = GlobalKey<FormState>();
   List<String> _services = [];
   var pickedImage;
@@ -23,6 +31,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String temp;
   var servicestr;
   var editedstr;
+  String url;
+  var email;
+  var _clicked = false;
+
+  var name, district, proPic;
+
+  void httpJob(AnimationController controller) async {
+    controller.forward();
+    await prepareUpload();
+    if (imageUrls.length < 5) {
+      while (imageUrls.length < 5) {
+        imageUrls.add("");
+      }
+    }
+    await AuthService().workerPortfolio(email, imageUrls).then((val) {
+      Fluttertoast.showToast(
+          msg: "Saved Successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 3,
+          backgroundColor: Theme.of(context).buttonColor,
+          textColor: Colors.black,
+          fontSize: 16.0);
+    });
+    controller.reset();
+  }
 
   void _takePicture() async {
     final _pickedImage = await picker.getImage(source: ImageSource.gallery);
@@ -73,7 +107,68 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _form.currentState.save();
   }
 
+  Future<CloudinaryResponse> prepareUpload() async {
+    CloudinaryResponse response;
+    if (_image.length > 0) {
+      for (var i = 0; i < _image.length; i++) {
+        response = await uploadFileOnCloudinary(
+          image: _image[i],
+          filePath: _image[i].path,
+          resourceType: CloudinaryResourceType.image,
+        );
+        url = response.url;
+        print(url);
+        imageUrls.add(url);
+      }
+    }
+    return response;
+  }
+
+  Future<CloudinaryResponse> uploadFileOnCloudinary(
+      {File image,
+      String filePath,
+      CloudinaryResourceType resourceType}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    Map<String, dynamic> payload = Jwt.parseJwt(token);
+    email = payload['email'];
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // var token = prefs.getString('token');
+
+    CloudinaryResponse response;
+    var cloudinary = Cloudinary.signedConfig(
+        apiKey: '461133995855746',
+        apiSecret: '-QpKX775LFGsnxH4csUfswOTQl4',
+        cloudName: 'projecthandyman');
+
+    response = await cloudinary.upload(
+      file: filePath,
+      fileBytes: image.readAsBytesSync(),
+      resourceType: CloudinaryResourceType.image,
+      folder: 'worker portfolio images/$email',
+      // progressCallback: (count, total) {
+      //   print('Uploading image from file with progress: $count/$total');
+      // },
+    );
+    return response;
+  }
+
   @override
+  void getDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    Map<String, dynamic> payload = Jwt.parseJwt(token);
+    name = payload['fName'] + ' ' + payload['lName'];
+    district = payload['district'];
+    // proPic =
+    // "https://res.cloudinary.com/projecthandyman/image/upload/v1666765606/WhatsApp_Image_2022-10-26_at_9.23.20_AM_c0kj5k.jpg";
+  }
+
+  // void initState() {
+  //   super.initState();
+  //   getDetails();
+  // }
+
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
@@ -465,6 +560,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: GestureDetector(
                       onTap: () {
                         _takePicture();
+                        _clicked = true;
                       },
                       child: Icon(
                         Icons.add_a_photo,
@@ -502,7 +598,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         centerTitle: true,
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.more_vert), onPressed: () {}),
+          // _clicked
+          //     ? IconButton(
+          //         icon: Icon(
+          //           Icons.check,
+          //           color: Theme.of(context).buttonColor,
+          //         ),
+          //         onPressed: () {
+          //           prepareUpload();
+
+          //           AuthService().workerPortfolio(email, imageUrls).then((val) {
+          //             Fluttertoast.showToast(
+          //                 msg: "Quotation Sent",
+          //                 toastLength: Toast.LENGTH_SHORT,
+          //                 gravity: ToastGravity.BOTTOM,
+          //                 timeInSecForIosWeb: 3,
+          //                 backgroundColor: Theme.of(context).buttonColor,
+          //                 textColor: Colors.black,
+          //                 fontSize: 16.0);
+          //             // Navigator.of(context).pop();
+          //           });
+          //         })
+          //     : Text(''),
         ],
       ),
       backgroundColor: Theme.of(context).backgroundColor,
@@ -528,6 +645,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
             coverImage(context, selectedImg, _isSelected),
             Divider(color: Colors.white54, indent: 25, endIndent: 25),
             imageSlider(context),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 20.0,
+                bottom: 10,
+                left: 15,
+                right: 15,
+              ),
+              child: _clicked
+                  ? GestureDetector(
+                      child: Container(
+                        height: 46,
+                        width: width * 0.5,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: ProgressButton(
+                            color: Theme.of(context).buttonColor,
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            child: Text('Save',
+                                style: TextStyle(
+                                    color: Theme.of(context).backgroundColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500)),
+                            onPressed: (AnimationController controller) async {
+                              await httpJob(controller);
+                            }),
+                      ),
+                    )
+                  : Center(
+                      child: Text(''),
+                    ),
+            ),
             Container(
               width: width,
               height: 130,
@@ -594,6 +743,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         showDialog(
                             context: context,
                             builder: (context) => addNewService(context));
+                        _clicked = true;
                       },
                       icon: Icon(
                         Icons.my_library_add_outlined,
@@ -615,7 +765,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     CircleAvatar(
                       radius: 45,
                       backgroundColor: Theme.of(context).shadowColor,
-                      backgroundImage: AssetImage('assets/images/profile.png'),
+                      backgroundImage: NetworkImage(
+                          "https://res.cloudinary.com/projecthandyman/image/upload/v1666765606/WhatsApp_Image_2022-10-26_at_9.23.20_AM_c0kj5k.jpg"),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
@@ -625,7 +776,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Saul Goodman',
+                            'Deelaka Kumara',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -665,12 +816,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               color: Colors.white,
                             ),
                           ),
-                          Text(
-                            'Member since 2020',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
                         ],
                       ),
                     )
@@ -680,19 +825,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  left: 15.0, right: 15, top: 5, bottom: 5),
-              child: Container(
-                width: width,
-                height: 100,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'This is the bio of the handyman. You can tell about your work experience and everything about you',
-                    style: TextStyle(color: Colors.white),
+                top: 20.0,
+                bottom: 10,
+                left: 15,
+                right: 15,
+              ),
+              child: GestureDetector(
+                child: Container(
+                  height: 46,
+                  width: width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
                   ),
+                  child: ProgressButton(
+                      color: Theme.of(context).backgroundColor,
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      child: Text('Log Out',
+                          style: TextStyle(
+                              color: Theme.of(context).buttonColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500)),
+                      onPressed: (AnimationController controller) async {
+                        SharedPreferences preferences =
+                            await SharedPreferences.getInstance();
+                        await preferences.clear();
+                        Navigator.of(context).pushNamed(LoginScreen.routeName);
+                      }),
                 ),
               ),
-            )
+            ),
+
+            // Padding(
+            //   padding: const EdgeInsets.only(
+            //       left: 15.0, right: 15, top: 5, bottom: 5),
+            //   child: Container(
+            //     width: width,
+            //     height: 100,
+            //     child: Padding(
+            //       padding: const EdgeInsets.all(8.0),
+            //       child: Text(
+            //         'This is the bio of the handyman. You can tell about your work experience and everything about you',
+            //         style: TextStyle(color: Colors.white),
+            //       ),
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),

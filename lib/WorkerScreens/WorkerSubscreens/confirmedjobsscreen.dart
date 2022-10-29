@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:handyman/WorkerScreens/WorkerSubscreens/quotation.dart';
-
+import 'package:handyman/WorkerScreens/WorkerSubscreens/quotationview.dart';
 
 import 'package:progress_indicator_button/progress_button.dart';
 import 'dart:async';
@@ -256,7 +256,7 @@ class _ConfirmedJobsScreenState extends State<ConfirmedJobsScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
                 child: Text(
-                  'Sample description Sample description Sample description Sample description Sample description Sample description Sample description Sample description Sample description',
+                  'Sample description',
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -284,7 +284,8 @@ class _ConfirmedJobsScreenState extends State<ConfirmedJobsScreen> {
                 GestureDetector(
                   onTap: () {
                     print("Clicked");
-                    Navigator.of(context).pushNamed(QuotationScreen.routeName);
+                    Navigator.of(context)
+                        .pushNamed(quotationviewScreen.routeName);
                   },
                   child: Text(
                     'View quotation',
@@ -299,22 +300,22 @@ class _ConfirmedJobsScreenState extends State<ConfirmedJobsScreen> {
             SizedBox(
               height: 20,
             ),
-            Column(
-              children: [
-                Text(
-                  '10',
-                  style: TextStyle(
-                      color: Theme.of(context).buttonColor,
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  'Hours',
-                  style: TextStyle(
-                      color: Theme.of(context).buttonColor, fontSize: 15),
-                ),
-              ],
-            ),
+            // Column(
+            //   children: [
+            //     Text(
+            //       '10',
+            //       style: TextStyle(
+            //           color: Theme.of(context).buttonColor,
+            //           fontSize: 50,
+            //           fontWeight: FontWeight.bold),
+            //     ),
+            //     Text(
+            //       'Hours',
+            //       style: TextStyle(
+            //           color: Theme.of(context).buttonColor, fontSize: 15),
+            //     ),
+            //   ],
+            // ),
             SizedBox(
               height: 30,
             ),
